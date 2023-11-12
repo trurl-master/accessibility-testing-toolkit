@@ -1,0 +1,145 @@
+<div data-testid="container">
+  <header>Banner header</header>
+  <section>
+    <header>Non-primary header</header>
+  </section>
+  <div aria-label="Group">
+    <header>Non-primary header</header>
+  </div>
+  <nav>
+    <header>Non-primary header</header>
+  </nav>
+  <section aria-label="a region">
+    <div>
+      <div>
+        <nav aria-label="Primary navigation">
+          <a href="http://whatever.com">link</a>
+          <a>invalid link</a>
+        </nav>
+      </div>
+    </div>
+
+    <h1>Main Heading</h1>
+    <h2>Sub Heading</h2>
+    <h3>Tertiary Heading</h3>
+    <div>Text</div>
+
+    <details open>
+      <summary>Valid details</summary>
+      Content
+    </details>
+
+    <code>
+      <pre>
+        Code block
+      </pre>
+    </code>
+
+    <embed src="http://www.w3.org/Icons/SVG/svg-logo.svg" />
+
+    <footer>Non-primary footer</footer>
+
+    <article>
+      <ul>
+        <li>Item 1</li>
+        <li>Item 2</li>
+      </ul>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Header 1</th>
+            <th>Header 2</th>
+            <th>Header 3</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Cell 1</td>
+            <td>Cell 2</td>
+            <td>Cell 3</td>
+          </tr>
+          <tr>
+            <td>Cell 1</td>
+            <td>Cell 2</td>
+            <td>Cell 3</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table>
+        <tr>
+          <td>Cell 1</td>
+          <td>Cell 2</td>
+          <td>Cell 3</td>
+        </tr>
+      </table>
+
+      <picture>
+        <source srcset="http://www.w3.org/Icons/SVG/svg-logo.svg" />
+        <img
+          src="http://www.w3.org/Icons/SVG/svg-logo.svg"
+          style="width: 200px"
+        />
+      </picture>
+
+      <div className="dialog_form_item">
+        <label htmlFor="special_instructions">
+          <span className="label_text">Special instructions:</span>
+        </label>
+        <input
+          id="special_instructions"
+          type="text"
+          aria-describedby="special_instructions_desc"
+          className="wide_input"
+        />
+        <div className="label_info" id="special_instructions_desc">
+          For example, gate code or other information to help the driver find
+          you
+        </div>
+      </div>
+
+      <form aria-label="a form">
+        <input type="radio" />
+        <input type="radio" />
+        <input type="text" />
+        <input type="text" />
+        <textarea></textarea>
+
+        <section>
+          <input id="1" type="checkbox" value="" />
+          <button id="2" role="checkbox" aria-checked="true">Sugar</button>
+          <button id="3" role="checkbox" aria-checked="false">
+            Gummy bears
+          </button>
+          <button id="4" role="checkbox" aria-checked="false">
+            Whipped cream
+          </button>
+        </section>
+      </form>
+
+      <ul>
+        <li>Item 1</li>
+        <li>Item 2</li>
+      </ul>
+
+      <form />
+      <section />
+    </article>
+    <dl>
+      <dt>Term</dt>
+      <dd>Definition</dd>
+    </dl>
+    <svg></svg>
+  </section>
+  <section>
+    <footer>Non-primary footer</footer>
+  </section>
+  <div aria-label="Group">
+    <footer>Non-primary footer</footer>
+  </div>
+  <nav>
+    <footer>Non-primary footer</footer>
+  </nav>
+  <footer>Landmark footer</footer>
+</div>
