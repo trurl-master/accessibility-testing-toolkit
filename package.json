@@ -1,13 +1,31 @@
 {
-  "name": "dom-to-a11y-tree",
+  "name": "accessibility-testing-toolkit",
   "version": "1.0.0",
-  "description": "Converts dom elements to accessibility tree",
+  "description": "A toolkit for testing accessibility",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trurl-master/accessibility-testing-toolkit.git"
+  },
+  "keywords": [
+    "testing",
+    "jsdom",
+    "jest",
+    "accessibility",
+    "accessibility tree",
+    "aria"
+  ],
   "scripts": {
     "test": "jest"
   },
   "author": "Ivan Galiatin",
   "license": "MIT",
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
   "peerDependencies": {
     "@testing-library/dom": "^8,^9"
   },
