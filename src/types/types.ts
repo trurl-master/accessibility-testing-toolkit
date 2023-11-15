@@ -1,8 +1,8 @@
 import { ARIARoleDefinitionKey } from 'aria-query';
 import { StaticText } from '../leafs';
 
-type AsNonLandmarkRoles = 'HeaderAsNonLandmark' | 'FooterAsNonLandmark';
-type VirtualRoles =
+export type AsNonLandmarkRoles = 'HeaderAsNonLandmark' | 'FooterAsNonLandmark';
+export type VirtualRoles =
   | 'Details'
   | 'DescriptionListDetails'
   | 'DescriptionList'
@@ -34,6 +34,7 @@ export type A11yTreeState = {
 };
 
 export type A11yTreeNode = {
+  element: HTMLElement;
   name: string;
   role: HTMLElement['role'] | undefined;
   description: string;

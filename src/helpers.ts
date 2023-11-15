@@ -3,7 +3,7 @@ import { A11yTreeForDiff, A11yTreeNode, A11yTreeState } from './types/types';
 
 export const containerAttributeValues: Omit<
   A11yTreeNode,
-  'state' | 'children'
+  'element' | 'state' | 'children'
 > = {
   name: '',
   role: 'generic',
@@ -22,16 +22,16 @@ export const defaultState: A11yTreeState = {
 
 export const isDefaultState = (state: A11yTreeState): boolean => {
   return Object.entries(state).every(
-    ([key, value]) => value === defaultState[key as keyof A11yTreeState],
+    ([key, value]) => value === defaultState[key as keyof A11yTreeState]
   );
 };
 
 export const isDefaultAttributeValues = (
-  node: A11yTreeNode | A11yTreeForDiff,
+  node: A11yTreeNode | A11yTreeForDiff
 ): boolean => {
   return Object.entries(containerAttributeValues).every(
     ([key, value]) =>
-      value === node[key as keyof typeof containerAttributeValues],
+      value === node[key as keyof typeof containerAttributeValues]
   );
 };
 
@@ -45,7 +45,7 @@ export function hasSingleStaticTextChild(tree: A11yTreeForDiff): boolean {
 
 export const getExpectedStringMatch = (
   receivedValue: string,
-  expectedValue: string | RegExp | undefined,
+  expectedValue: string | RegExp | undefined
 ): string | RegExp => {
   // return expectedValue ? expectedValue : receivedValue;
   if (expectedValue === undefined) {

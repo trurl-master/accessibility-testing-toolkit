@@ -1,5 +1,13 @@
 import { A11yTreeNodeMatch } from './types';
 
+type MatcherOptions = {
+  isNonLandmarkSubtree?: boolean;
+};
+
+type PruneOptions = {
+  containerNodes?: string[] | ((element: HTMLElement) => boolean);
+};
+
 // Custom matcher result type
 interface MatcherResult {
   message: () => string;
@@ -9,53 +17,50 @@ interface MatcherResult {
 declare global {
   namespace jest {
     interface Matchers<R> {
-      toHaveA11yTree(match?: A11yTreeNodeMatch): R;
+      /**
+       * @description
+       * Asserts that the accessibility tree for an element matches the expected structure.
+       * An accessibility tree represents how a user agent (such as a screen reader) processes and communicates
+       * accessibility information from the DOM. Use this matcher to check whether the pertinent accessibility
+       * properties and relationships are correctly established, ensuring an accessible experience for users
+       * of assistive technologies.
+       *
+       * The expected structure is defined by the `A11yTreeNodeMatch` interface, which can accommodate various
+       * properties like role, name, description, state, and children.
+       *
+       * The second parameter allows for optional configuration settings
+       *
+       * @example
+       * // Example with byRole hierarchy:
+       * <nav aria-label="Main navigation">
+       *   <ul>
+       *     <li><a href="/home">Home</a></li>
+       *     <li><a href="/about">About</a></li>
+       *   </ul>
+       *   <button disabled>Click me</button>
+       * </nav>
+       *
+       * expect(screen.getByRole('navigation', { name: 'Main navigation' })).toHaveA11yTree(
+       *   byRole('navigation', [
+       *     byRole('list', [
+       *       byRole('listitem', [
+       *         byRole('link', { name: 'Home' }),
+       *       ]),
+       *       byRole('listitem', [
+       *         byRole('link', { name: 'About' }),
+       *       ]),
+       *     ]),
+       *     byRole('button', { name: 'Click me', disabled: true }),
+       *   ])
+       * );
+       *
+       * @see
+       * - [W3C Accessibility Tree](https://www.w3.org/TR/wai-aria/#accessibility_tree)
+       * - [ARIA in HTML](https://www.w3.org/TR/html-aria/)
+       */
+      toHaveA11yTree(match?: A11yTreeNodeMatch, options?: MatcherOptions): R;
     }
   }
 }
 
-export {}; // Required if in a module to modify the global scope
-
-// import { A11yTreeNodeMatch } from './types';
-
-// declare namespace matchers {
-//   interface A11yTreeMatchers<E, R> {
-//     /**
-//      * @description
-//      * This allows to assert that an element has the expected [accessible name](https://w3c.github.io/accname/).
-//      * It is useful, for instance, to assert that form elements and buttons are properly labelled.
-//      *
-//      * You can pass the exact string of the expected accessible name, or you can make a
-//      * partial match passing a regular expression, or by using either
-//      * [expect.stringContaining](https://jestjs.io/docs/en/expect.html#expectnotstringcontainingstring)
-//      * or [expect.stringMatching](https://jestjs.io/docs/en/expect.html#expectstringmatchingstring-regexp).
-//      * @example
-//      * <img data-testid="img-alt" src="" alt="Test alt" />
-//      * <img data-testid="img-empty-alt" src="" alt="" />
-//      * <svg data-testid="svg-title"><title>Test title</title></svg>
-//      * <button data-testid="button-img-alt"><img src="" alt="Test" /></button>
-//      * <p><img data-testid="img-paragraph" src="" alt="" /> Test content</p>
-//      * <button data-testid="svg-button"><svg><title>Test</title></svg></p>
-//      * <div><svg data-testid="svg-without-title"></svg></div>
-//      * <input data-testid="input-title" title="test" />
-//      *
-//      * expect(getByTestId('img-alt')).toHaveAccessibleName('Test alt')
-//      * expect(getByTestId('img-empty-alt')).not.toHaveAccessibleName()
-//      * expect(getByTestId('svg-title')).toHaveAccessibleName('Test title')
-//      * expect(getByTestId('button-img-alt')).toHaveAccessibleName()
-//      * expect(getByTestId('img-paragraph')).not.toHaveAccessibleName()
-//      * expect(getByTestId('svg-button')).toHaveAccessibleName()
-//      * expect(getByTestId('svg-without-title')).not.toHaveAccessibleName()
-//      * expect(getByTestId('input-title')).toHaveAccessibleName()
-//      * @see
-//      * [testing-library/jest-dom#tohaveaccessiblename](https://github.com/testing-library/jest-dom#tohaveaccessiblename)
-//      */
-//     toHaveA11yTree(match?: A11yTreeNodeMatch): R;
-//   }
-// }
-
-// // Needs to extend Record<string, any> to be accepted by expect.extend()
-// // as it requires a string index signature.
-// declare const matchers: matchers.A11yTreeMatchers<never, void> &
-//   Record<string, any>;
-// export = matchers;
+export { MatcherOptions }; // Required if in a module to modify the global scope

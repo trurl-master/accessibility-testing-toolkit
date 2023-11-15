@@ -4,7 +4,9 @@ import { RoleMatcher } from './types/types';
 export const nonLandmarkVirtualRoles: RoleMatcher[] = [
   // header: 'HeaderAsNonLandmark',
   {
-    match: (node: HTMLElement) => node.tagName.toLowerCase() === 'header',
+    match: (node: HTMLElement) => {
+      return node.tagName.toLowerCase() === 'header';
+    },
     roles: ['HeaderAsNonLandmark'],
     specificity: 1,
   },

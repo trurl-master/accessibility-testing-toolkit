@@ -7,7 +7,7 @@ const elementRoleList = buildElementRoleList(elementRoles);
 
 function getImplicitAriaRoles(
   currentNode: HTMLElement,
-  isNonLandmarkSubtree: boolean,
+  isNonLandmarkSubtree: boolean
 ) {
   let result: ARIARoleDefinitionKeyExtended[] = [];
 
@@ -69,7 +69,7 @@ function buildElementRoleList(elementRolesMap: typeof elementRoles) {
 
   function bySelectorSpecificity(
     { specificity: leftSpecificity }: { specificity: number },
-    { specificity: rightSpecificity }: { specificity: number },
+    { specificity: rightSpecificity }: { specificity: number }
   ) {
     return rightSpecificity - leftSpecificity;
   }
@@ -82,7 +82,7 @@ function buildElementRoleList(elementRolesMap: typeof elementRoles) {
       (attribute) =>
         attribute.value &&
         attribute.name === 'type' &&
-        attribute.value === 'text',
+        attribute.value === 'text'
     );
 
     if (typeTextIndex >= 0) {

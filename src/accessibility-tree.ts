@@ -1,4 +1,3 @@
-import { isInaccessible } from '@testing-library/dom';
 import {
   computeAriaBusy,
   computeAriaChecked,
@@ -13,39 +12,33 @@ import { A11yTreeNode } from './types/types';
 import {
   computeAccessibleDescription,
   computeAccessibleName,
+  isInaccessible,
 } from 'dom-accessibility-api';
 import { isDefined } from './type-guards';
 import { StaticText } from './leafs';
+import { MatcherOptions } from './types/matchers';
 
 // if a descendant of an article, aside, main, nav or section element, or an element with role=article, complementary, main, navigation or region
-const isNonLandmarkRole = (role: string) =>
+const isNonLandmarkRole = (element: HTMLElement, role: string) =>
+  ['article', 'aside', 'main', 'nav', 'section'].includes(
+    element.tagName.toLowerCase()
+  ) ||
   ['aricle', 'complementary', 'main', 'navigation', 'region'].includes(role);
-
-type Options = {
-  isNonLandmarkSubtree?: boolean;
-};
 
 const defaultOptions = {
   isNonLandmarkSubtree: false,
-} satisfies Options;
+} satisfies MatcherOptions;
 
-export const getAccessibleTree = (
+export const getAccessibilityTree = (
   element: HTMLElement,
   {
     isNonLandmarkSubtree:
       userNonLandmarkSubtree = defaultOptions.isNonLandmarkSubtree,
-  }: Options = defaultOptions,
+  }: MatcherOptions = defaultOptions
 ): A11yTreeNode | null => {
-  // console.log(
-  //   'node',
-  //   isInaccessible(element) ? 'inaccessible' : 'accessible',
-  //   computeRoles(element),
-  //   element.childNodes.entries(),
-  // );
-
   function assembleTree(
     element: HTMLElement,
-    { nonLandmarkSubtree }: { nonLandmarkSubtree: boolean },
+    { nonLandmarkSubtree }: { nonLandmarkSubtree: boolean }
   ): A11yTreeNode | null {
     if (isInaccessible(element)) {
       return null;
@@ -56,6 +49,7 @@ export const getAccessibleTree = (
     const childNodes = Array.from(element.childNodes);
 
     return {
+      element,
       role,
       name: computeAccessibleName(element),
       description: computeAccessibleDescription(element),
@@ -72,7 +66,8 @@ export const getAccessibleTree = (
         .map((child) => {
           if (child instanceof HTMLElement) {
             return assembleTree(child, {
-              nonLandmarkSubtree: nonLandmarkSubtree || isNonLandmarkRole(role),
+              nonLandmarkSubtree:
+                nonLandmarkSubtree || isNonLandmarkRole(element, role),
             });
           }
 

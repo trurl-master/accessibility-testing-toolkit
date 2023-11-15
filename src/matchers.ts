@@ -1,20 +1,17 @@
 import { A11yTreeNode, A11yTreeNodeMatch } from './types/types';
 import { StaticText } from './leafs';
-import { getAccessibleTree } from './accessibility-tree';
-import { flattenA11yTree } from './flatten-a11y-tree';
+import { getAccessibilityTree } from './accessibility-tree';
+import { pruneContainerNodes } from './prune-container-nodes';
 import { type Tester, type TesterContext } from '@jest/expect-utils';
-import {
-  isA11yTreeNode,
-  isA11yTreeNodeMatch,
-  // isStaticTextMatcher,
-} from './type-guards';
+import { isA11yTreeNode, isA11yTreeNodeMatch } from './type-guards';
 import { matchToNode } from './prepare-diff';
 import { getPrettyTree } from './pretty-tree';
+import { MatcherOptions } from './types/matchers';
 
 function staticTextMatcher(
   this: TesterContext,
   a: unknown,
-  b: unknown,
+  b: unknown
 ): boolean | undefined {
   const isAStaticText = a instanceof StaticText;
   const isBStringMatcher = b instanceof RegExp || typeof b === 'string';
@@ -40,7 +37,7 @@ function treeNodeMatcher(
   this: TesterContext,
   a: unknown,
   b: unknown,
-  customTesters?: Tester[],
+  customTesters?: Tester[]
 ): boolean | undefined {
   const isAA11yTreeNode = isA11yTreeNode(a);
   const isBA11yTreeNodeMatch = isA11yTreeNodeMatch(b);
@@ -73,19 +70,9 @@ function treeNodeMatcher(
     isEqual &&= this.equals(a.state, b.state, customTesters);
   }
 
-  // console.log('what', !b.children!.every(isStaticTextMatcher));
-
-  if (
-    b.children !== undefined
-    // &&
-    // b.children.length > 0 &&
-    // This is not correct
-    // (!b.children.every(isStaticTextMatcher) || b.name === undefined)
-  ) {
-    // console.log('matching children');
+  if (b.children !== undefined) {
     if (a.children === undefined) {
       throw new Error('treeNodeMatcher: a.children is undefined');
-      // return false;
     }
 
     if (a.children.length !== b.children.length) {
@@ -133,9 +120,10 @@ expect.extend({
   toHaveA11yTree(
     received: HTMLElement | A11yTreeNode,
     expected: A11yTreeNodeMatch,
+    options?: MatcherOptions
   ) {
     if (received instanceof HTMLElement) {
-      const tree = getAccessibleTree(received);
+      const tree = getAccessibilityTree(received, options);
 
       if (tree === null) {
         return {
@@ -144,7 +132,7 @@ expect.extend({
         };
       }
 
-      const flatTree = flattenA11yTree(tree);
+      const flatTree = pruneContainerNodes(tree);
 
       if (flatTree === null) {
         return {
@@ -158,29 +146,15 @@ expect.extend({
 
     const expectedResult = prepareA11yTreeNodeMatch(expected);
 
-    // console.log('expected', expected.children[0]);
-    // console.log('expected', matchToNode(received, expected)?.children);
-    // console.log('received', received.children);
-
-    // console.log('expected', expectedResult.children);
-    // console.log('received', received.children);
-
     const pass = this.equals(received, expectedResult, [
       staticTextMatcher,
       treeNodeMatcher,
     ]);
 
-    // console.log('pass', pass);
-
     const expectedPreparedForDiff = matchToNode(received, expected);
-
-    // console.log('expected', expectedPreparedForDiff);
 
     const expectedPrettyTree = getPrettyTree(expectedPreparedForDiff);
     const receivedPrettyTree = getPrettyTree(received);
-
-    // console.log('expected', expectedPrettyTree);
-    // console.log('received', receivedPrettyTree);
 
     if (pass) {
       return {

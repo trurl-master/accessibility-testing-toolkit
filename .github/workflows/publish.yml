@@ -1,0 +1,49 @@
+name: Publish
+
+on:
+  release:
+    # This specifies that the build will be triggered when we publish a release
+    types: [published]
+
+jobs:
+  publish:
+    name: 'Publish'
+    runs-on: ubuntu-latest
+    if: "!contains(github.ref_name, 'beta')"
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 'lts/*'
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install deps and build (with cache)
+        uses: bahmutov/npm-install@v1
+
+      - run: npm run build
+
+      - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+
+  publish_beta:
+    name: 'Publish beta'
+    runs-on: ubuntu-latest
+    if: contains(github.ref_name, 'beta')
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 'lts/*'
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install deps and build (with cache)
+        uses: bahmutov/npm-install@v1
+
+      - run: npm run build
+
+      - run: npm publish --tag beta --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

@@ -1,4 +1,3 @@
-import { containerAttributeValues, defaultState } from './helpers';
 import { A11yTreeNodeMatch } from './types/types';
 
 type NameDescriptionState = Omit<A11yTreeNodeMatch, 'role' | 'children'> &
@@ -6,25 +5,25 @@ type NameDescriptionState = Omit<A11yTreeNodeMatch, 'role' | 'children'> &
 
 function byRole(
   role: A11yTreeNodeMatch['role'],
-  properties: NameDescriptionState,
+  properties: NameDescriptionState
 ): A11yTreeNodeMatch;
 function byRole(
   role: A11yTreeNodeMatch['role'],
   properties: NameDescriptionState,
-  children: A11yTreeNodeMatch['children'],
+  children: A11yTreeNodeMatch['children']
 ): A11yTreeNodeMatch;
 function byRole(
   role: A11yTreeNodeMatch['role'],
-  children: A11yTreeNodeMatch['children'],
+  children: A11yTreeNodeMatch['children']
+): A11yTreeNodeMatch;
+function byRole(
+  role: A11yTreeNodeMatch['role'],
+  name: string | RegExp
 ): A11yTreeNodeMatch;
 function byRole(
   role: A11yTreeNodeMatch['role'],
   name: string | RegExp,
-): A11yTreeNodeMatch;
-function byRole(
-  role: A11yTreeNodeMatch['role'],
-  name: string | RegExp,
-  children: A11yTreeNodeMatch['children'],
+  children: A11yTreeNodeMatch['children']
 ): A11yTreeNodeMatch;
 function byRole(role: A11yTreeNodeMatch['role']): A11yTreeNodeMatch;
 function byRole(
@@ -34,7 +33,7 @@ function byRole(
     | RegExp
     | NameDescriptionState
     | A11yTreeNodeMatch['children'],
-  childrenIfProvided?: A11yTreeNodeMatch['children'],
+  childrenIfProvided?: A11yTreeNodeMatch['children']
 ): A11yTreeNodeMatch {
   const a11yNode: A11yTreeNodeMatch = {
     role: role,
@@ -73,21 +72,4 @@ function byRole(
   return a11yNode;
 }
 
-const byText = (text: string | RegExp): A11yTreeNodeMatch => {
-  const a11yTreeNodeMatch: A11yTreeNodeMatch = {
-    ...containerAttributeValues,
-    state: { ...defaultState },
-  };
-
-  a11yTreeNodeMatch.children = [text];
-
-  return a11yTreeNodeMatch;
-};
-
-const container = (
-  children: A11yTreeNodeMatch['children'],
-): A11yTreeNodeMatch => {
-  return byRole('generic', {}, children);
-};
-
-export { byRole, container, byText };
+export { byRole };
