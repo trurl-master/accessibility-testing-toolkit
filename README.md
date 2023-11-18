@@ -2,7 +2,7 @@
 
 ## Installation
 
-You can install `accessibility-testing-toolkit` as a development dependency in your project using either `npm` or `Yarn`. This will add the toolkit to the `devDependencies` in your `package.json` file.
+You can install `accessibility-testing-toolkit` as a development dependency in your project using your preferred package manager:
 
 With `npm`:
 
@@ -99,7 +99,7 @@ test('accessible dialog has the correct accessibility tree', () => {
         ),
       ]),
       byRole('paragraph', ['This cannot be undone.']),
-      // containers are ignored
+      // containers are ignored, so we don't need to specify the div
       byRole('button', 'Accept'),
       byRole('button', 'Cancel'),
     ]

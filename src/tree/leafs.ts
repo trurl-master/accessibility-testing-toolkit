@@ -1,7 +1,7 @@
 class StaticText {
-  text: string | null;
+  text: string;
 
-  constructor(text: string | null) {
+  constructor(text: string) {
     this.text = text;
   }
 

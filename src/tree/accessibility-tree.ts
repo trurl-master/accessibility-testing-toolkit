@@ -96,6 +96,10 @@ export const getAccessibilityTree = (
           }
 
           if (child instanceof Text) {
+            if (child.textContent === null) {
+              return undefined;
+            }
+
             return new StaticText(child.textContent);
           }
 
