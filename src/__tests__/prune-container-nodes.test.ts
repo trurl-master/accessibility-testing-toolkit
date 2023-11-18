@@ -1,6 +1,10 @@
-import { pruneContainerNodes } from '../prune-container-nodes';
-import { containerAttributeValues, defaultState } from '../helpers';
-import { StaticText } from '../leafs';
+import { pruneContainerNodes } from '../tree/prune-container-nodes';
+import {
+  containerAttributeValues,
+  defaultQueries,
+  defaultState,
+} from '../helpers';
+import { StaticText } from '../tree/leafs';
 
 describe('flattenA11yTree', () => {
   it('should not remove the root container', () => {
@@ -10,6 +14,7 @@ describe('flattenA11yTree', () => {
       element: document.createElement('div'),
       ...containerAttributeValues,
       state: defaultState,
+      queries: defaultQueries,
       children: [staticText],
     };
 
@@ -23,11 +28,13 @@ describe('flattenA11yTree', () => {
       element: document.createElement('div'),
       ...containerAttributeValues,
       state: defaultState,
+      queries: defaultQueries,
       children: [
         {
           element: document.createElement('div'),
           ...containerAttributeValues,
           state: defaultState,
+          queries: defaultQueries,
           children: [staticText],
         },
       ],
@@ -37,6 +44,7 @@ describe('flattenA11yTree', () => {
       element: document.createElement('div'),
       ...containerAttributeValues,
       state: defaultState,
+      queries: defaultQueries,
       children: [staticText],
     });
   });
@@ -50,6 +58,7 @@ describe('flattenA11yTree', () => {
       name: '',
       description: '',
       state: defaultState,
+      queries: defaultQueries,
       children: [staticText],
     };
 
@@ -59,6 +68,7 @@ describe('flattenA11yTree', () => {
       name: '',
       description: '',
       state: defaultState,
+      queries: defaultQueries,
       children: [staticText],
     });
   });
@@ -72,11 +82,13 @@ describe('flattenA11yTree', () => {
       name: '',
       description: '',
       state: defaultState,
+      queries: defaultQueries,
       children: [
         {
           element: document.createElement('div'),
           ...containerAttributeValues,
           state: defaultState,
+          queries: defaultQueries,
           children: [staticText],
         },
       ],
@@ -88,6 +100,7 @@ describe('flattenA11yTree', () => {
       name: '',
       description: '',
       state: defaultState,
+      queries: defaultQueries,
       children: [staticText],
     });
   });
@@ -101,11 +114,13 @@ describe('flattenA11yTree', () => {
       name: '',
       description: '',
       state: defaultState,
+      queries: defaultQueries,
       children: [
         {
           element: document.createElement('div'),
           ...containerAttributeValues,
           state: defaultState,
+          queries: defaultQueries,
           children: [staticText],
         },
       ],
@@ -117,6 +132,7 @@ describe('flattenA11yTree', () => {
       name: '',
       description: '',
       state: defaultState,
+      queries: defaultQueries,
       children: [staticText],
     });
   });
@@ -128,16 +144,19 @@ describe('flattenA11yTree', () => {
       element: document.createElement('div'),
       ...containerAttributeValues,
       state: defaultState,
+      queries: defaultQueries,
       children: [
         {
           element: document.createElement('div'),
           ...containerAttributeValues,
           state: defaultState,
+          queries: defaultQueries,
           children: [
             {
               element: document.createElement('div'),
               ...containerAttributeValues,
               state: defaultState,
+              queries: defaultQueries,
               children: [staticText],
             },
           ],
@@ -149,6 +168,7 @@ describe('flattenA11yTree', () => {
       element: document.createElement('div'),
       ...containerAttributeValues,
       state: defaultState,
+      queries: defaultQueries,
       children: [staticText],
     });
   });

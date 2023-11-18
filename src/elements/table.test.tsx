@@ -19,7 +19,7 @@ describe('table', () => {
             <td>Cell 3</td>
           </tr>
         </tbody>
-      </table>,
+      </table>
     );
 
     expect(container).toHaveA11yTree(
@@ -40,7 +40,7 @@ describe('table', () => {
             ]),
           ]),
         ]),
-      ]),
+      ])
     );
   });
 });

@@ -1,15 +1,30 @@
-import { A11yTreeNodeMatch } from './types/types';
+import { isTextMatcher } from './type-guards';
+import {
+  A11yTreeNodeMatch,
+  A11yTreeNodeQueriesMatch,
+  A11yTreeNodeStateMatch,
+} from './types/types';
 
-type NameDescriptionState = Omit<A11yTreeNodeMatch, 'role' | 'children'> &
-  A11yTreeNodeMatch['state'];
+type NameDescriptionStateQueries = Omit<
+  A11yTreeNodeMatch,
+  'role' | 'children'
+> &
+  A11yTreeNodeStateMatch &
+  A11yTreeNodeQueriesMatch;
+
+function anyObjectPropertiesAreDefined<
+  ObjectTypeTemplate extends Record<string, unknown>,
+>(obj: ObjectTypeTemplate): boolean {
+  return Object.values(obj).some((value) => value !== undefined);
+}
 
 function byRole(
   role: A11yTreeNodeMatch['role'],
-  properties: NameDescriptionState
+  properties: NameDescriptionStateQueries
 ): A11yTreeNodeMatch;
 function byRole(
   role: A11yTreeNodeMatch['role'],
-  properties: NameDescriptionState,
+  properties: NameDescriptionStateQueries,
   children: A11yTreeNodeMatch['children']
 ): A11yTreeNodeMatch;
 function byRole(
@@ -31,7 +46,7 @@ function byRole(
   nameOrPropertiesOrChildren?:
     | string
     | RegExp
-    | NameDescriptionState
+    | NameDescriptionStateQueries
     | A11yTreeNodeMatch['children'],
   childrenIfProvided?: A11yTreeNodeMatch['children']
 ): A11yTreeNodeMatch {
@@ -42,11 +57,7 @@ function byRole(
   if (typeof nameOrPropertiesOrChildren === 'undefined') {
     // byRole with only role
     return a11yNode;
-  } else if (
-    // byRole with role and name
-    typeof nameOrPropertiesOrChildren === 'string' ||
-    nameOrPropertiesOrChildren instanceof RegExp
-  ) {
+  } else if (isTextMatcher(nameOrPropertiesOrChildren)) {
     a11yNode.name = nameOrPropertiesOrChildren;
     // Only assign children if they are provided
     if (Array.isArray(childrenIfProvided)) {
@@ -59,10 +70,16 @@ function byRole(
   }
   // byRole with role and name/description/state or with role, name/description/state, and children
   else if (typeof nameOrPropertiesOrChildren === 'object') {
-    const { name, description, ...state } = nameOrPropertiesOrChildren;
+    const { name, description, ...stateAndQueries } =
+      nameOrPropertiesOrChildren;
     a11yNode.name = name;
     a11yNode.description = description;
-    a11yNode.state = state;
+    const { level, value, ...state } = stateAndQueries;
+    const queries = { level, value };
+    a11yNode.state = anyObjectPropertiesAreDefined(state) ? state : undefined;
+    a11yNode.queries = anyObjectPropertiesAreDefined(queries)
+      ? queries
+      : undefined;
 
     if (Array.isArray(childrenIfProvided)) {
       a11yNode.children = childrenIfProvided;

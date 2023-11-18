@@ -1,13 +1,21 @@
 import { type ARIARoleRelationConcept, elementRoles } from 'aria-query';
-import { isInputElement } from './type-guards';
-import { RoleMatcher, ARIARoleDefinitionKeyExtended } from './types/types';
-import { nonLandmarkVirtualRoles, virtualRoles } from './virtual-roles';
+import { isInputElement } from '../type-guards';
+import {
+  RoleMatcher,
+  ARIARoleDefinitionKeyExtended,
+  A11yTreeNodeContext,
+} from '../types/types';
+import {
+  nonLandmarkVirtualRoles,
+  nonListListItemRoles,
+  virtualRoles,
+} from './virtual-roles';
 
 const elementRoleList = buildElementRoleList(elementRoles);
 
 function getImplicitAriaRoles(
   currentNode: HTMLElement,
-  isNonLandmarkSubtree: boolean
+  { isListSubtree, isNonLandmarkSubtree }: A11yTreeNodeContext
 ) {
   let result: ARIARoleDefinitionKeyExtended[] = [];
 
@@ -16,6 +24,16 @@ function getImplicitAriaRoles(
     if (match(currentNode)) {
       result = [...roles];
       break;
+    }
+  }
+
+  // override roles if list subtree
+  if (!isListSubtree) {
+    for (const { match, roles } of nonListListItemRoles) {
+      if (match(currentNode)) {
+        result = [...roles];
+        break;
+      }
     }
   }
 
@@ -122,80 +140,4 @@ function buildElementRoleList(elementRolesMap: typeof elementRoles) {
   return result.sort(bySelectorSpecificity);
 }
 
-// function getRoles(container: HTMLElement, { hidden = false } = {}) {
-//   function flattenDOM(node) {
-//     return [
-//       node,
-//       ...Array.from(node.children).reduce(
-//         (acc, child) => [...acc, ...flattenDOM(child)],
-//         [],
-//       ),
-//     ];
-//   }
-
-//   return flattenDOM(container)
-//     .filter((element) => {
-//       return hidden === false ? isInaccessible(element) === false : true;
-//     })
-//     .reduce((acc, node) => {
-//       let roles = [];
-//       // TODO: This violates html-aria which does not allow any role on every element
-//       if (node.hasAttribute('role')) {
-//         roles = node.getAttribute('role').split(' ').slice(0, 1);
-//       } else {
-//         roles = getImplicitAriaRoles(node);
-//       }
-
-//       return roles.reduce(
-//         (rolesAcc, role) =>
-//           Array.isArray(rolesAcc[role])
-//             ? { ...rolesAcc, [role]: [...rolesAcc[role], node] }
-//             : { ...rolesAcc, [role]: [node] },
-//         acc,
-//       );
-//     }, {});
-// }
-
-// function prettyRoles(dom, { hidden, includeDescription }) {
-//   const roles = getRoles(dom, { hidden });
-//   // We prefer to skip generic role, we don't recommend it
-//   return Object.entries(roles)
-//     .filter(([role]) => role !== 'generic')
-//     .map(([role, elements]) => {
-//       const delimiterBar = '-'.repeat(50);
-//       const elementsString = elements
-//         .map((el) => {
-//           const nameString = `Name "${computeAccessibleName(el, {
-//             computedStyleSupportsPseudoElements:
-//               getConfig().computedStyleSupportsPseudoElements,
-//           })}":\n`;
-
-//           const domString = prettyDOM(el.cloneNode(false));
-
-//           if (includeDescription) {
-//             const descriptionString = `Description "${computeAccessibleDescription(
-//               el,
-//               {
-//                 computedStyleSupportsPseudoElements:
-//                   getConfig().computedStyleSupportsPseudoElements,
-//               },
-//             )}":\n`;
-//             return `${nameString}${descriptionString}${domString}`;
-//           }
-
-//           return `${nameString}${domString}`;
-//         })
-//         .join('\n\n');
-
-//       return `${role}:\n\n${elementsString}\n\n${delimiterBar}`;
-//     })
-//     .join('\n');
-// }
-
-export {
-  // getRoles,
-  getImplicitAriaRoles,
-  // isSubtreeInaccessible,
-  // prettyRoles,
-  // isInaccessible,
-};
+export { getImplicitAriaRoles };

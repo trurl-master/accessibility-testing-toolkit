@@ -9,6 +9,26 @@
   <nav>
     <header>Non-primary header</header>
   </nav>
+  <section>
+    <button
+      role="spinbutton"
+      aria-valuenow="{5}"
+      aria-valuemin="{0}"
+      aria-valuemax="{10}"
+      aria-valuetext="medium"
+    >
+      Volume
+    </button>
+    <button
+      role="spinbutton"
+      aria-valuenow="{3}"
+      aria-valuemin="{0}"
+      aria-valuemax="{10}"
+      aria-valuetext="medium"
+    >
+      Pitch
+    </button>
+  </section>
   <section aria-label="a region">
     <div>
       <div>
@@ -40,10 +60,24 @@
     <footer>Non-primary footer</footer>
 
     <article>
+      <h3>Lists</h3>
+      <h4>ul > li</h4>
       <ul>
         <li>Item 1</li>
         <li>Item 2</li>
       </ul>
+
+      <h4>ol > li</h4>
+      <ol>
+        <li>Item 1</li>
+        <li>Item 2</li>
+      </ol>
+
+      <h4>div > li</h4>
+      <div>
+        <li>Item 1</li>
+        <li>Item 2</li>
+      </div>
 
       <table>
         <thead>

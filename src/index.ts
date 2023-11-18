@@ -5,9 +5,9 @@ export {
   AsNonLandmarkRoles,
   VirtualRoles,
   ARIARoleDefinitionKeyExtended,
-  A11yTreeState,
+  A11yTreeNodeState as A11yTreeState,
   A11yTreeNode,
   A11yTreeNodeMatch,
 } from './types/types';
-export { getAccessibilityTree } from './accessibility-tree';
-export { pruneContainerNodes as flattenAccessibilityTree } from './prune-container-nodes';
+export { getAccessibilityTree } from './tree/accessibility-tree';
+export { pruneContainerNodes as flattenAccessibilityTree } from './tree/prune-container-nodes';

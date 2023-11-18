@@ -1,8 +1,6 @@
-import { A11yTreeNodeMatch } from './types';
+import { A11yTreeNodeMatch, A11yTreeNodeContext } from './types';
 
-type MatcherOptions = {
-  isNonLandmarkSubtree?: boolean;
-};
+type MatcherOptions = A11yTreeNodeContext;
 
 type PruneOptions = {
   containerNodes?: string[] | ((element: HTMLElement) => boolean);

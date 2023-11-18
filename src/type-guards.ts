@@ -1,28 +1,21 @@
-import { A11yTreeNode, A11yTreeNodeMatch } from './types/types';
+import { A11yTreeNode, A11yTreeNodeMatch, TextMatcher } from './types/types';
 
 // Element type guards
 const isOptionElement = (element: HTMLElement): element is HTMLOptionElement =>
   element.tagName === 'OPTION';
 
-const HEADING_TAGS = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6'] as const;
-type HeadingTag = (typeof HEADING_TAGS)[number];
-const isHeadingElement = (
-  element: HTMLElement,
-): element is HTMLHeadingElement =>
-  HEADING_TAGS.includes(element.tagName as HeadingTag);
-
 const isInputElement = (element: HTMLElement): element is HTMLInputElement =>
   element.tagName === 'INPUT';
 
 const isDetailsElement = (
-  element: HTMLElement,
+  element: HTMLElement
 ): element is HTMLDetailsElement => element.tagName === 'DETAILS';
 
 const isDefined = <T>(value: T | undefined | null): value is T =>
   value !== undefined && value !== null;
 
 const isStaticTextMatcher = (
-  value: unknown,
+  value: unknown
 ): value is string | RegExp | A11yTreeNodeMatch =>
   typeof value === 'string' || value instanceof RegExp;
 
@@ -41,15 +34,19 @@ const isA11yTreeNodeMatch = (value: unknown): value is A11yTreeNodeMatch =>
     'state' in value ||
     'children' in value);
 
+const isTextMatcher = (value: unknown): value is TextMatcher =>
+  typeof value === 'string' ||
+  typeof value === 'number' ||
+  value instanceof RegExp ||
+  typeof value === 'function';
+
 export {
   isOptionElement,
-  HEADING_TAGS,
-  HeadingTag,
-  isHeadingElement,
   isInputElement,
   isDetailsElement,
   isDefined,
   isStaticTextMatcher,
   isA11yTreeNode,
   isA11yTreeNodeMatch,
+  isTextMatcher,
 };

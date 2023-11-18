@@ -1,8 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { byRole } from '..';
 
-describe('ul element', () => {
-  it('renders correct structure', () => {
+describe('list elements (ul/ol/menu)', () => {
+  it('renders list items with listitem role when descendant of ul', () => {
     const { container } = render(
       <ul>
         <li>Item 1</li>
@@ -18,21 +18,16 @@ describe('ul element', () => {
     );
   });
 
-  it('test', () => {
-    render(
-      <footer>
-        <p>Contact us: contact@example.com</p>
-      </footer>
+  it('renders list items with generic role when not descendant of ul', () => {
+    const { container } = render(
+      <div>
+        <li>Item 1</li>
+        <li>Item 2</li>
+      </div>
     );
 
-    expect(screen.getByRole('contentinfo')).toHaveA11yTree({
-      role: 'contentinfo',
-      children: [
-        {
-          role: 'paragraph',
-          children: ['Contact us: contact@example.com'],
-        },
-      ],
-    });
+    expect(container.firstChild).toHaveA11yTree(
+      byRole('generic', ['Item 1', 'Item 2'])
+    );
   });
 });

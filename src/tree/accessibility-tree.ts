@@ -5,18 +5,24 @@ import {
   computeAriaExpanded,
   computeAriaPressed,
   computeAriaSelected,
+  computeAriaValueMax,
+  computeAriaValueMin,
+  computeAriaValueNow,
+  computeAriaValueText,
+  computeHeadingLevel,
   computeRoles,
 } from './compute-properties';
 
-import { A11yTreeNode } from './types/types';
+import { A11yTreeNode, A11yTreeNodeContext } from '../types/types';
 import {
   computeAccessibleDescription,
   computeAccessibleName,
   isInaccessible,
+  isDisabled,
 } from 'dom-accessibility-api';
-import { isDefined } from './type-guards';
+import { isDefined } from '../type-guards';
 import { StaticText } from './leafs';
-import { MatcherOptions } from './types/matchers';
+import { MatcherOptions } from '../types/matchers';
 
 // if a descendant of an article, aside, main, nav or section element, or an element with role=article, complementary, main, navigation or region
 const isNonLandmarkRole = (element: HTMLElement, role: string) =>
@@ -25,26 +31,33 @@ const isNonLandmarkRole = (element: HTMLElement, role: string) =>
   ) ||
   ['aricle', 'complementary', 'main', 'navigation', 'region'].includes(role);
 
+const isList = (role: HTMLElement['role']) => role === 'list';
+// ['list', 'listbox', 'menu', 'menubar', 'radiogroup', 'tablist'].includes(
+//   role ?? ''
+// );
+
 const defaultOptions = {
+  isListSubtree: false,
   isNonLandmarkSubtree: false,
 } satisfies MatcherOptions;
 
 export const getAccessibilityTree = (
   element: HTMLElement,
   {
+    isListSubtree: userListSubtree = defaultOptions.isListSubtree,
     isNonLandmarkSubtree:
       userNonLandmarkSubtree = defaultOptions.isNonLandmarkSubtree,
   }: MatcherOptions = defaultOptions
 ): A11yTreeNode | null => {
   function assembleTree(
     element: HTMLElement,
-    { nonLandmarkSubtree }: { nonLandmarkSubtree: boolean }
+    context: A11yTreeNodeContext
   ): A11yTreeNode | null {
     if (isInaccessible(element)) {
       return null;
     }
 
-    const [role] = computeRoles(element, nonLandmarkSubtree);
+    const [role] = computeRoles(element, context);
 
     const childNodes = Array.from(element.childNodes);
 
@@ -57,27 +70,43 @@ export const getAccessibilityTree = (
         busy: computeAriaBusy(element),
         checked: computeAriaChecked(element),
         current: computeAriaCurrent(element),
-        disabled: (element as HTMLInputElement)?.disabled,
+        disabled: isDisabled(element),
         expanded: computeAriaExpanded(element),
         pressed: computeAriaPressed(element),
         selected: computeAriaSelected(element),
+      },
+      queries: {
+        level: computeHeadingLevel(element),
+        value: {
+          min: computeAriaValueMin(element),
+          max: computeAriaValueMax(element),
+          now: computeAriaValueNow(element),
+          text: computeAriaValueText(element),
+        },
       },
       children: (childNodes ?? [])
         .map((child) => {
           if (child instanceof HTMLElement) {
             return assembleTree(child, {
-              nonLandmarkSubtree:
-                nonLandmarkSubtree || isNonLandmarkRole(element, role),
+              isListSubtree: context.isListSubtree || isList(role),
+              isNonLandmarkSubtree:
+                context.isNonLandmarkSubtree ||
+                isNonLandmarkRole(element, role),
             });
           }
 
           if (child instanceof Text) {
             return new StaticText(child.textContent);
           }
+
+          return undefined;
         })
         .filter(isDefined),
     };
   }
 
-  return assembleTree(element, { nonLandmarkSubtree: userNonLandmarkSubtree });
+  return assembleTree(element, {
+    isListSubtree: userListSubtree,
+    isNonLandmarkSubtree: userNonLandmarkSubtree,
+  });
 };

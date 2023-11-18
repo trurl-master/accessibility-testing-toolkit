@@ -1,7 +1,8 @@
-import { RoleMatcher } from './types/types';
+import { RoleMatcher } from '../types/types';
 
 // if child of <main>, <nav>, <aside>, <article>, or <section>
 export const nonLandmarkVirtualRoles: RoleMatcher[] = [
+  // https://w3c.github.io/html-aria/#el-header
   // header: 'HeaderAsNonLandmark',
   {
     match: (node: HTMLElement) => {
@@ -10,6 +11,7 @@ export const nonLandmarkVirtualRoles: RoleMatcher[] = [
     roles: ['HeaderAsNonLandmark'],
     specificity: 1,
   },
+  // https://w3c.github.io/html-aria/#el-footer
   // footer: 'FooterAsNonLandmark',
   {
     match: (node: HTMLElement) => node.tagName.toLowerCase() === 'footer',
@@ -18,6 +20,20 @@ export const nonLandmarkVirtualRoles: RoleMatcher[] = [
   },
 ];
 
+export const nonListListItemRoles: RoleMatcher[] = [
+  // li: 'generic',
+  // https://www.w3.org/TR/wai-aria-1.2/#listitem
+  {
+    match: (node: HTMLElement) => node.tagName.toLowerCase() === 'li',
+    roles: ['generic'],
+    specificity: 1,
+  },
+];
+
+/**
+ * Override certain roles to be more specific.
+ * Similar to how Google Chrome devtools does it.
+ */
 export const virtualRoles: RoleMatcher[] = [
   // details: 'Details',
   {

@@ -1,10 +1,6 @@
 import { getImplicitAriaRoles } from './role-helpers';
-import {
-  isOptionElement,
-  isHeadingElement,
-  type HeadingTag,
-  isDetailsElement,
-} from './type-guards';
+import { isOptionElement, isDetailsElement } from '../type-guards';
+import { A11yTreeNodeContext } from '../types/types';
 
 function checkBooleanAttribute(element: HTMLElement, attribute: string) {
   const attributeValue = element.getAttribute(attribute);
@@ -102,12 +98,8 @@ function computeAriaExpanded(element: HTMLElement) {
  * @returns {number | undefined} - number if implicit heading or aria-level present, otherwise undefined
  */
 function computeHeadingLevel(element: HTMLElement) {
-  if (!isHeadingElement(element)) {
-    return undefined;
-  }
-
   // https://w3c.github.io/html-aam/#el-h1-h6
-  const implicitHeadingLevels = {
+  const implicitHeadingLevels: Record<string, number> = {
     H1: 1,
     H2: 2,
     H3: 3,
@@ -121,9 +113,7 @@ function computeHeadingLevel(element: HTMLElement) {
     element.getAttribute('aria-level') &&
     Number(element.getAttribute('aria-level'));
 
-  return (
-    ariaLevelAttribute || implicitHeadingLevels[element.tagName as HeadingTag]
-  );
+  return ariaLevelAttribute || implicitHeadingLevels[element.tagName];
 }
 
 /**
@@ -162,13 +152,13 @@ function computeAriaValueText(element: HTMLElement) {
   return valueText === null ? undefined : valueText;
 }
 
-function computeRoles(element: HTMLElement, isNonLandmarkSubtree: boolean) {
+function computeRoles(element: HTMLElement, context: A11yTreeNodeContext) {
   let roles = [];
   // TODO: This violates html-aria which does not allow any role on every element
   if (element.hasAttribute('role')) {
     roles = element.getAttribute('role')!.split(' ').slice(0, 1);
   } else {
-    roles = getImplicitAriaRoles(element, isNonLandmarkSubtree);
+    roles = getImplicitAriaRoles(element, context);
   }
 
   return roles;

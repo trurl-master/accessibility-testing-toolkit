@@ -1,6 +1,6 @@
-import { A11yTreeNode } from './types/types';
+import { A11yTreeNode } from '../types/types';
 import { StaticText } from './leafs';
-import { isContainer } from './helpers';
+import { isContainer } from '../helpers';
 
 /**
  * Removes container nodes from the tree, flattening the tree.

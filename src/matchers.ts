@@ -1,12 +1,13 @@
 import { A11yTreeNode, A11yTreeNodeMatch } from './types/types';
-import { StaticText } from './leafs';
-import { getAccessibilityTree } from './accessibility-tree';
-import { pruneContainerNodes } from './prune-container-nodes';
+import { StaticText } from './tree/leafs';
+import { getAccessibilityTree } from './tree/accessibility-tree';
+import { pruneContainerNodes } from './tree/prune-container-nodes';
 import { type Tester, type TesterContext } from '@jest/expect-utils';
 import { isA11yTreeNode, isA11yTreeNodeMatch } from './type-guards';
 import { matchToNode } from './prepare-diff';
 import { getPrettyTree } from './pretty-tree';
 import { MatcherOptions } from './types/matchers';
+import { textMatcherTester } from './testers';
 
 function staticTextMatcher(
   this: TesterContext,
@@ -51,8 +52,7 @@ function treeNodeMatcher(
   let isEqual = true;
 
   if (b.name !== undefined) {
-    isEqual &&=
-      b.name instanceof RegExp ? b.name.test(a.name) : a.name === b.name;
+    isEqual &&= textMatcherTester(a.name, b.name, a.element);
   }
 
   if (b.role !== undefined) {
@@ -60,15 +60,24 @@ function treeNodeMatcher(
   }
 
   if (b.description !== undefined) {
-    isEqual &&=
-      b.description instanceof RegExp
-        ? b.description.test(a.description)
-        : a.description === b.description;
+    isEqual &&= textMatcherTester(a.description, b.description, a.element);
   }
 
   if (b.state !== undefined) {
     isEqual &&= this.equals(a.state, b.state, customTesters);
   }
+
+  // console.log('isEqual 1', a.queries, b.queries);
+
+  if (b.queries !== undefined) {
+    // isEqual &&= this.equals(a.queries, b.queries, customTesters);
+    isEqual &&= a.queries.level === b.queries.level;
+    if (b.queries.value !== undefined) {
+      isEqual &&= a.queries.value.min === b.queries.value.min;
+    }
+  }
+
+  // console.log('isEqual 2', isEqual);
 
   if (b.children !== undefined) {
     if (a.children === undefined) {
@@ -146,6 +155,9 @@ expect.extend({
 
     const expectedResult = prepareA11yTreeNodeMatch(expected);
 
+    // console.log('received', received);
+    // console.log('expectedResult', expectedResult);
+
     const pass = this.equals(received, expectedResult, [
       staticTextMatcher,
       treeNodeMatcher,
@@ -155,6 +167,9 @@ expect.extend({
 
     const expectedPrettyTree = getPrettyTree(expectedPreparedForDiff);
     const receivedPrettyTree = getPrettyTree(received);
+
+    // console.log('expectedPrettyTree', expectedPrettyTree);
+    // console.log('receivedPrettyTree', receivedPrettyTree);
 
     if (pass) {
       return {
