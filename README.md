@@ -2,25 +2,19 @@
 
 ## Installation
 
-### Installing with npm
+You can install `accessibility-testing-toolkit` as a development dependency in your project using either `npm` or `Yarn`. This will add the toolkit to the `devDependencies` in your `package.json` file.
 
-To install the package in your project, run the following command in your terminal:
+With `npm`:
 
 ```bash
 npm install --save-dev accessibility-testing-toolkit
 ```
 
-This will add the toolkit to your project's devDependencies in your package.json file.
-
-### Installing with Yarn
-
-If you prefer to use Yarn, you can install the toolkit by running:
+With `Yarn`:
 
 ```bash
 yarn add --dev accessibility-testing-toolkit
 ```
-
-This will achieve the same result as using npm but with Yarn's package management system.
 
 ## Usage
 
@@ -121,7 +115,22 @@ test('accessible dialog has the correct accessibility tree', () => {
 
 #### Pruning Container Nodes
 
-Container nodes in the DOM, such as non-semantic `<div>` and `<span>` elements, can clutter the accessibility tree and obscure meaningful hierarchy in tests. The Accessibility Testing Toolkit automatically prunes these nodes, simplifying test assertions by focusing on semantically significant elements. This approach reduces test fragility against markup changes and enhances clarity, allowing developers to concentrate on the core accessibility features of their components. By ignoring container nodes, the toolkit promotes a development workflow that prioritizes user experience over structural implementation details.
+Container nodes in the DOM, such as non-semantic `<div>` and `<span>` elements, can clutter the accessibility tree and obscure meaningful hierarchy in tests. The Accessibility Testing Toolkit automatically prunes these nodes (_except for the root node_), simplifying test assertions by focusing on semantically significant elements. This approach reduces test fragility against markup changes and enhances clarity, allowing developers to concentrate on the core accessibility features of their components. By ignoring container nodes, the toolkit promotes a development workflow that prioritizes user experience over structural implementation details.
+
+#### Calculating roles
+
+The toolkit follows standardized role definitions, with some customizations to provide more specific roles for certain elements, similar to the approach used by Google Chrome
+
+Specifically, the toolkit applies the following custom roles:
+
+- `details`: Mapped to `Details`
+- `dd`: Mapped to `DescriptionListDetails`
+- `dl`: Mapped to `DescriptionList`
+- `dt`: Mapped to `DescriptionListTerm`
+- `embed`: Mapped to `EmbeddedObject`
+- `object`: Mapped to `PluginObject`
+- `label`: Mapped to `LabelText`
+- `summary`: Mapped to `DisclosureTriangle`
 
 ### `byRole` Helper
 
@@ -153,75 +162,29 @@ byRole builds an accessibility tree node object with the specified role and any 
 
 #### Properties
 
-##### `name`
+- `name` (`TextMatcher`) - Matches the accessible name. Accepts strings, numbers, regex, or functions.
+- `description` (`TextMatcher`) - Matches additional descriptive text.
+- `busy` (`boolean`) - Indicates if the element is busy.
+- `checked` (`boolean`) - Represents the checked state of checkboxes or radios.
+- `current` (`string | boolean`) - Denotes the current status within a set (e.g. "page").
+- `disabled` (`boolean`) - States if the element is disabled.
+- `expanded` (`boolean`) - Reflects the expandable state of associated content.
+- `pressed` (`boolean`) - Indicates the pressed state of toggle buttons.
+- `selected` (`boolean`) - Signifies the selection state of selectable elements.
+- `level` (`number`) - Applies to elements within a hierarchy (like heading levels).
+- `value.min` (`number`) - Specifies the minimum value for the element.
+- `value.max` (`number`) - Specifies the maximum value for the element.
+- `value.now` (`number`) - Indicates the current value within the element's range.
+- `value.text` (`TextMatcher`) - Provides a textual representation of the element's value.
 
-- Type: `TextMatcher`
-- Description: The accessible name property is essential for assistive technologies to identify elements. It can be a string, number, regular expression, or a custom function to match the element's name.
+#### `TextMatcher`
 
-##### `description`
+The `TextMatcher` type is used for matching text content and can take several forms:
 
-- Type: `TextMatcher`
-- Description: Provides additional descriptive text for the element, which can be matched against a string, number, regular expression, or custom function.
-
-##### `busy`
-
-- Type: `boolean`
-- Description: Indicates whether the element, such as a region or application, is currently "busy" and may not be interacted with.
-
-##### `checked`
-
-- Type: `boolean`
-- Description: Represents the checked state of input elements like checkboxes or radio buttons.
-
-##### `current`
-
-- Type: `string | boolean`
-- Description: Denotes an element's current status within a set, helping assistive technologies understand context, such as "page" or "step."
-
-##### `disabled`
-
-- Type: `boolean`
-- Description: States whether the element is disabled, making it inoperable or non-editable.
-
-##### `expanded`
-
-- Type: `boolean`
-- Description: Reflects the expandable state of an element's associated content, such as a collapsible list.
-
-##### `pressed`
-
-- Type: `boolean`
-  Description: Indicates the pressed state of toggle buttons, providing a binary state similar to checked.
-
-##### `selected`
-
-- Type: `boolean`
-- Description: Applicable to elements that can be selected, such as options in a list; signifies the selection state.
-
-##### `level`
-
-- Type: `number`
-- Description: Applies to elements that exist in a hierarchy, such as heading levels in a document structure.
-
-##### `value.min`
-
-- Type: `number`
-- Description: Specifies the minimum acceptable value for the element.
-
-##### `value.max`
-
-- Type: number
-- Description: Specifies the maximum acceptable value for the element.
-
-##### `value.now`
-
-- Type: `number`
-- Description: Indicates the current value within the range of the element.
-
-##### `value.text`
-
-- Type: `TextMatcher`
-- Description: Provides a textual representation of the element's value, allowing matching via string, number, regular expression, or function.
+- `string`: Direct comparison with text content.
+- `number`: Matches text content with the number converted to a string.
+- `RegExp`: Tests text content against the regular expression.
+- `TextMatcherFunction`: A function that returns true if the content matches criteria; it takes the text content and the associated HTML element as arguments.
 
 #### Examples
 
