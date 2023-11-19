@@ -123,6 +123,7 @@ The toolkit follows standardized role definitions, with some customizations to p
 
 Specifically, the toolkit applies the following custom roles:
 
+- `abbr`: Mapped to `Abbr`
 - `details`: Mapped to `Details`
 - `dd`: Mapped to `DescriptionListDetails`
 - `dl`: Mapped to `DescriptionList`
@@ -130,6 +131,7 @@ Specifically, the toolkit applies the following custom roles:
 - `embed`: Mapped to `EmbeddedObject`
 - `object`: Mapped to `PluginObject`
 - `label`: Mapped to `LabelText`
+- `br`: Mapped to `LineBreak`
 - `summary`: Mapped to `DisclosureTriangle`
 
 ### `byRole` Helper

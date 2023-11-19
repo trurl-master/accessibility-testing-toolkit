@@ -3,6 +3,7 @@ import { StaticText } from '../tree/leafs';
 
 export type AsNonLandmarkRoles = 'HeaderAsNonLandmark' | 'FooterAsNonLandmark';
 export type VirtualRoles =
+  | 'Abbr'
   | 'Details'
   | 'DescriptionListDetails'
   | 'DescriptionList'
@@ -10,6 +11,7 @@ export type VirtualRoles =
   | 'EmbeddedObject'
   | 'PluginObject'
   | 'LabelText'
+  | 'LineBreak'
   | 'DisclosureTriangle';
 
 export type ARIARoleDefinitionKeyExtended =

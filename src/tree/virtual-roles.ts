@@ -35,6 +35,12 @@ export const nonListListItemRoles: RoleMatcher[] = [
  * Similar to how Google Chrome devtools does it.
  */
 export const virtualRoles: RoleMatcher[] = [
+  // abbr: 'Abbr'
+  {
+    match: (node: HTMLElement) => node.tagName.toLowerCase() === 'abbr',
+    roles: ['Abbr'],
+    specificity: 1,
+  },
   // details: 'Details',
   {
     match: (node: HTMLElement) => node.tagName.toLowerCase() === 'details',
@@ -75,6 +81,12 @@ export const virtualRoles: RoleMatcher[] = [
   {
     match: (node: HTMLElement) => node.tagName.toLowerCase() === 'label',
     roles: ['LabelText'],
+    specificity: 1,
+  },
+  // br: 'LineBreak',
+  {
+    match: (node: HTMLElement) => node.tagName.toLowerCase() === 'br',
+    roles: ['LineBreak'],
     specificity: 1,
   },
   // summary: 'DisclosureTriangle',
