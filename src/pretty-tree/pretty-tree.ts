@@ -1,18 +1,28 @@
-import { defaultState } from './helpers';
-import { StaticText } from './tree/leafs';
-import { A11yTreeForDiff, A11yTreeNodeState, TextMatcher } from './types/types';
+// import { defaultState } from '../helpers';
+import { defaultQueries, defaultState } from '../helpers';
+import { StaticText } from '../tree/leafs';
+import {
+  A11yTreeForDiff,
+  // A11yTreeNodeState,
+  // A11yTreeNodeStateForDiff,
+  TextMatcher,
+} from '../types/types';
+import { omitDefaultValues } from './omit-default-values';
+import { renderProperties } from './render-properties';
 
-const getStateDetails = (state: A11yTreeNodeState): string => {
-  const nonDefaultEntries = Object.entries(state).filter(
-    ([key, value]) => value !== defaultState[key as keyof A11yTreeNodeState]
-  );
+// const getStateDetails = (
+//   state: A11yTreeNodeState | A11yTreeNodeStateForDiff
+// ): string => {
+//   const nonDefaultEntries = Object.entries(state).filter(
+//     ([key, value]) => value !== defaultState[key as keyof A11yTreeNodeState]
+//   );
 
-  return nonDefaultEntries.length > 0
-    ? `{ ${nonDefaultEntries
-        .map(([key, value]) => `${key}: ${value}`)
-        .join(', ')} }`
-    : '';
-};
+//   return nonDefaultEntries.length > 0
+//     ? `${nonDefaultEntries
+//         .map(([key, value]) => `${key}: ${value}`)
+//         .join(', ')}`
+//     : '';
+// };
 
 const renderStringMatcher = (textMatcher: TextMatcher): string => {
   if (textMatcher instanceof RegExp || typeof textMatcher === 'number') {
@@ -52,13 +62,23 @@ export const getPrettyTree = (
     return `${indentation}${tree.toString()}\n`;
   }
 
+  const filteredState = tree.state
+    ? omitDefaultValues(tree.state, defaultState)
+    : undefined;
+  const filteredQueries = tree.queries
+    ? omitDefaultValues(tree.queries, defaultQueries)
+    : undefined;
+
   // Omitting the name if it's empty
   const nameString = tree.name ? ` ${renderStringMatcher(tree.name)}` : '';
-  const stateString = getStateDetails(tree.state);
+  const stateString = filteredState
+    ? ` ${renderProperties(filteredState)}`
+    : '';
+  const queriesString = filteredQueries
+    ? ` ${renderProperties(filteredQueries)}`
+    : '';
 
-  let output = `${indentation}${tree.role}${nameString}${
-    stateString ? ' ' + stateString : ''
-  }\n`;
+  let output = `${indentation}${tree.role}${nameString}${stateString}${queriesString}\n`;
 
   // Only including the description if it's present
   if (tree.description) {

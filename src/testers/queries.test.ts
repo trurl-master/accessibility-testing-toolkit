@@ -1,4 +1,4 @@
-import { queriesTester } from '../../testers/queries';
+import { queriesTester } from './queries';
 
 const definedQueries = {
   level: 1,

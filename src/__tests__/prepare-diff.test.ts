@@ -1,9 +1,15 @@
-import { defaultQueries, defaultState } from '../helpers';
+import {
+  getDefaultQueries,
+  getDefaultState,
+  getNonDefaultQueries,
+  getNonDefaultState,
+} from '../helpers';
 import { StaticText } from '../tree/leafs';
 import {
   computeDiffState,
   computeDiffQueries,
   computeTextValue,
+  matchToNode,
 } from '../prepare-diff';
 
 describe('prepare-diff', () => {
@@ -113,7 +119,7 @@ describe('prepare-diff', () => {
             role: 'button',
             name: '',
             description: '',
-            state: defaultState,
+            state: getDefaultState(),
             queries: {
               level: 1,
               value: {
@@ -126,7 +132,7 @@ describe('prepare-diff', () => {
           },
           undefined
         )
-      ).toEqual(defaultState);
+      ).toEqual(getDefaultState());
     });
 
     it('replaces values from received with values from expected', () => {
@@ -137,8 +143,8 @@ describe('prepare-diff', () => {
             role: 'button',
             name: '',
             description: '',
-            state: defaultState,
-            queries: defaultQueries,
+            state: getDefaultState(),
+            queries: getDefaultQueries(),
           },
           {
             state: {
@@ -177,14 +183,14 @@ describe('prepare-diff', () => {
 
     it('returns expected if received is undefined and expected is defined', () => {
       expect(
-        computeDiffQueries(undefined, { queries: { level: 1 } }, null)
+        computeDiffQueries(undefined, { queries: getNonDefaultQueries() }, null)
       ).toEqual({
         level: 1,
         value: {
-          min: undefined,
-          max: undefined,
-          now: undefined,
-          text: undefined,
+          min: 1,
+          max: 1,
+          now: 1,
+          text: 'text',
         },
       });
     });
@@ -215,7 +221,7 @@ describe('prepare-diff', () => {
             role: 'button',
             name: '',
             description: '',
-            state: defaultState,
+            state: getDefaultState(),
             queries: {
               level: 1,
               value: {
@@ -229,7 +235,7 @@ describe('prepare-diff', () => {
           undefined,
           null
         )
-      ).toEqual({
+      ).toStrictEqual({
         level: 1,
         value: {
           min: 0,
@@ -248,7 +254,7 @@ describe('prepare-diff', () => {
             role: 'button',
             name: '',
             description: '',
-            state: defaultState,
+            state: getDefaultState(),
             queries: {
               level: 1,
               value: {
@@ -280,6 +286,115 @@ describe('prepare-diff', () => {
           now: 100,
           text: 'bar',
         },
+      });
+    });
+  });
+
+  describe('matchToNode', () => {
+    it('returns undefined if received is undefined, and expected is undefined', () => {
+      expect(matchToNode(undefined, undefined)).toBeUndefined();
+    });
+
+    it('returns expected if received is undefined and expected is defined', () => {
+      expect(
+        matchToNode(undefined, {
+          role: 'button',
+          name: 'Click me',
+          description: 'A button that can be clicked',
+          state: getNonDefaultState(),
+          queries: getNonDefaultQueries(),
+        })
+      ).toEqual({
+        role: 'button',
+        name: 'Click me',
+        description: 'A button that can be clicked',
+        state: getNonDefaultState(),
+        queries: getNonDefaultQueries(),
+        children: [],
+      });
+    });
+
+    it('returns received if received is A11yTreeNode and expected is undefined', () => {
+      expect(
+        matchToNode(
+          {
+            element: document.createElement('button'),
+            role: 'button',
+            name: '',
+            description: '',
+            state: getDefaultState(),
+            queries: getDefaultQueries(),
+          },
+          undefined
+        )
+      ).toStrictEqual({
+        role: 'button',
+        name: '',
+        description: '',
+        state: getDefaultState(),
+        queries: getDefaultQueries(),
+        children: [],
+      });
+    });
+
+    it('replaces values from received with values from expected', () => {
+      expect(
+        matchToNode(
+          {
+            element: document.createElement('button'),
+            role: 'button',
+            name: '',
+            description: '',
+            state: getDefaultState(),
+            queries: getDefaultQueries(),
+          },
+          {
+            role: 'button',
+            name: 'Click me',
+            description: 'A button that can be clicked',
+            state: {
+              busy: true,
+              checked: true,
+              current: 'page',
+              disabled: true,
+              expanded: true,
+              pressed: true,
+              selected: true,
+            },
+            queries: {
+              level: 2,
+              value: {
+                min: 10,
+                max: 200,
+                now: 100,
+                text: 'bar',
+              },
+            },
+          }
+        )
+      ).toEqual({
+        role: 'button',
+        name: 'Click me',
+        description: 'A button that can be clicked',
+        state: {
+          busy: true,
+          checked: true,
+          current: 'page',
+          disabled: true,
+          expanded: true,
+          pressed: true,
+          selected: true,
+        },
+        queries: {
+          level: 2,
+          value: {
+            min: 10,
+            max: 200,
+            now: 100,
+            text: 'bar',
+          },
+        },
+        children: [],
       });
     });
   });

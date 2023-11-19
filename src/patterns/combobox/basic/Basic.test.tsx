@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { byRole } from '../../../test-helpers';
+import { byRole } from '../../../helpers/by-role';
 import userEvent from '@testing-library/user-event';
 
 const BasicSelect = () => {
@@ -27,7 +27,7 @@ describe('BasicSelect pattern', () => {
           byRole('option', { name: 'Second Value', selected: true }),
           byRole('option', { name: 'Third Value' }),
         ]),
-      ]),
+      ])
     );
   });
 
@@ -45,7 +45,7 @@ describe('BasicSelect pattern', () => {
         byRole('option', { name: 'First Value', selected: true }),
         byRole('option', { name: 'Second Value' }),
         byRole('option', { name: 'Third Value' }),
-      ]),
+      ])
     );
   });
 });

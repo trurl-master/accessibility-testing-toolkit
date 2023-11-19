@@ -7,12 +7,9 @@ import {
   TextMatcher,
 } from './types/types';
 import { StaticText } from './tree/leafs';
-import {
-  defaultQueries,
-  defaultState,
-  getExpectedStringMatch,
-} from './helpers';
+import { getDefaultState, getDefaultQueries } from './helpers';
 import { isA11yTreeNode } from './type-guards';
+import _cloneDeep from 'lodash.clonedeep';
 
 const getReceivedName = (
   node: A11yTreeNode | StaticText | undefined
@@ -95,9 +92,7 @@ export const computeDiffState = (
 
   if (expected?.state) {
     if (state === undefined) {
-      state = {
-        ...defaultState,
-      };
+      state = getDefaultState();
     }
 
     state.busy = expected.state.busy ?? state.busy;
@@ -120,15 +115,11 @@ export const computeDiffQueries = (
   let queries: A11yTreeNodeQueriesForDiff | undefined =
     received instanceof StaticText || !received
       ? undefined
-      : {
-          ...received.queries,
-        };
+      : _cloneDeep(received.queries);
 
   if (expected?.queries) {
     if (queries === undefined) {
-      queries = {
-        ...defaultQueries,
-      };
+      queries = getDefaultQueries();
     }
 
     queries.level = expected.queries.level;
@@ -146,12 +137,9 @@ export const computeDiffQueries = (
         queries.value.now = expected.queries.value.now;
       }
 
-      if (
-        isA11yTreeNode(received) &&
-        expected.queries.value.text !== undefined
-      ) {
-        queries.value.text = getExpectedStringMatch(
-          received?.queries.value.text,
+      if (expected.queries.value.text !== undefined) {
+        queries.value.text = computeTextValue(
+          isA11yTreeNode(received) ? received?.queries.value.text : undefined,
           expected.queries.value.text,
           element
         );
@@ -164,6 +152,7 @@ export const computeDiffQueries = (
 
 // Recursively replaces values from received tree with values from expected tree
 // where expected tree has a value for a given key. Replaces text by StaticText nodes where possible
+// This is needed to not show the difference when the user doesn't care about a value
 export const matchToNode = (
   received: A11yTreeNode | StaticText | undefined,
   expected: A11yTreeNodeMatch | undefined
@@ -238,26 +227,14 @@ export const matchToNode = (
     })
     .filter(Boolean);
 
-  if (
-    role === undefined ||
-    name === undefined ||
-    description === undefined ||
-    state === undefined ||
-    queries === undefined
-  ) {
-    return undefined;
-  }
-
-  const result: A11yTreeForDiff | undefined = expected
-    ? {
-        role,
-        name,
-        description,
-        state,
-        queries,
-        children,
-      }
-    : undefined;
+  const result: A11yTreeForDiff | undefined = {
+    role,
+    name,
+    description,
+    state,
+    queries,
+    children,
+  };
 
   return result;
 };

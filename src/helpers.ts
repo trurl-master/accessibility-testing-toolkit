@@ -5,8 +5,9 @@ import {
   A11yTreeNodeQueries,
   A11yTreeNodeQueriesForDiff,
   A11yTreeNodeState,
-  TextMatcher,
 } from './types/types';
+import _deepClone from 'lodash.clonedeep';
+import _isEqual from 'lodash.isequal';
 
 export const containerAttributeValues: Omit<
   A11yTreeNode,
@@ -27,6 +28,22 @@ export const defaultState: A11yTreeNodeState = {
   selected: undefined,
 };
 
+export const nonDefaultState: A11yTreeNodeState = {
+  busy: true,
+  checked: true,
+  current: true,
+  disabled: true,
+  expanded: true,
+  pressed: true,
+  selected: true,
+};
+
+export const getDefaultState = (): A11yTreeNodeState =>
+  _deepClone(defaultState);
+
+export const getNonDefaultState = (): A11yTreeNodeState =>
+  _deepClone(nonDefaultState);
+
 export const defaultQueries: A11yTreeNodeQueries = {
   level: undefined,
   value: {
@@ -37,23 +54,30 @@ export const defaultQueries: A11yTreeNodeQueries = {
   },
 };
 
+export const nonDefaultQueries: A11yTreeNodeQueries = {
+  level: 1,
+  value: {
+    min: 1,
+    max: 1,
+    now: 1,
+    text: 'text',
+  },
+};
+
+export const getDefaultQueries = (): A11yTreeNodeQueries =>
+  _deepClone(defaultQueries);
+
+export const getNonDefaultQueries = (): A11yTreeNodeQueries =>
+  _deepClone(nonDefaultQueries);
+
 export const isDefaultState = (state: A11yTreeNodeState): boolean => {
-  return Object.entries(state).every(
-    ([key, value]) => value === defaultState[key as keyof A11yTreeNodeState]
-  );
+  return _isEqual(state, defaultState);
 };
 
 export const isDefaultQueries = (
   queries: A11yTreeNodeQueries | A11yTreeNodeQueriesForDiff
 ): boolean => {
-  // deep equal queries
-  return (
-    queries.level === defaultQueries.level &&
-    queries.value.min === defaultQueries.value.min &&
-    queries.value.max === defaultQueries.value.max &&
-    queries.value.now === defaultQueries.value.now &&
-    queries.value.text === defaultQueries.value.text
-  );
+  return _isEqual(queries, defaultQueries);
 };
 
 export const isDefaultAttributeValues = (
@@ -65,7 +89,7 @@ export const isDefaultAttributeValues = (
   );
 };
 
-export const isContainer = (node: A11yTreeNode | A11yTreeForDiff): boolean => {
+export const isContainer = (node: A11yTreeNode): boolean => {
   return (
     isDefaultAttributeValues(node) &&
     isDefaultState(node.state) &&
@@ -76,29 +100,3 @@ export const isContainer = (node: A11yTreeNode | A11yTreeForDiff): boolean => {
 export function hasSingleStaticTextChild(tree: A11yTreeForDiff): boolean {
   return tree?.children?.length === 1 && tree.children[0] instanceof StaticText;
 }
-
-export const getExpectedStringMatch = (
-  receivedValue: string | undefined,
-  expectedValue: TextMatcher | undefined,
-  element: HTMLElement | null
-): TextMatcher | undefined => {
-  if (receivedValue === undefined) {
-    return expectedValue;
-  }
-
-  if (expectedValue === undefined) {
-    return receivedValue;
-  }
-
-  if (expectedValue instanceof RegExp) {
-    return expectedValue.test(receivedValue) ? receivedValue : expectedValue;
-  }
-
-  if (typeof expectedValue === 'function') {
-    return expectedValue(receivedValue, element)
-      ? receivedValue
-      : expectedValue;
-  }
-
-  return expectedValue;
-};

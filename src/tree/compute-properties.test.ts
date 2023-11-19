@@ -1,4 +1,4 @@
-import { computeRoles } from '../tree/compute-properties';
+import { computeRoles } from './compute-properties';
 
 describe('computeRoles', () => {
   it('should return the role attribute', () => {

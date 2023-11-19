@@ -1,4 +1,4 @@
-import { textTester } from '../../testers/text';
+import { textTester } from './text';
 
 describe('textTester', () => {
   it('returns true if expected is undefined', () => {

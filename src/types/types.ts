@@ -99,11 +99,11 @@ export type A11yTreeNodeQueriesForDiff = {
 };
 
 export type A11yTreeForDiff = {
-  name: TextMatcher;
-  role: HTMLElement['role'] | undefined;
-  description: TextMatcher;
-  state: A11yTreeNodeStateForDiff;
-  queries: A11yTreeNodeQueriesForDiff;
+  name?: TextMatcher;
+  role?: HTMLElement['role'] | undefined;
+  description?: TextMatcher;
+  state?: A11yTreeNodeStateForDiff;
+  queries?: A11yTreeNodeQueriesForDiff;
   children?: (
     | A11yTreeForDiff
     | StaticText

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { byRole } from '../../test-helpers';
+import { byRole } from '../../helpers/by-role';
 
 const WithLabalAndDescription = () => {
   return (
@@ -44,8 +44,8 @@ describe('Basic', () => {
           byRole('paragraph', ['Description']),
           byRole('button', 'Submit'),
           byRole('button', 'Close'),
-        ],
-      ),
+        ]
+      )
     );
   });
 
@@ -69,8 +69,8 @@ describe('Basic', () => {
           byRole('paragraph', [/Descript/]),
           byRole('button', /Sub/),
           byRole('button', /Clo/),
-        ],
-      ),
+        ]
+      )
     );
   });
 
@@ -89,8 +89,8 @@ describe('Basic', () => {
           name: 'Title',
           description: 'Description',
         },
-        [/sdaasd/],
-      ),
+        [/sdaasd/]
+      )
     );
   });
 });

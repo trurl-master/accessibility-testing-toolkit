@@ -1,10 +1,10 @@
-import { pruneContainerNodes } from '../tree/prune-container-nodes';
+import { pruneContainerNodes } from './prune-container-nodes';
 import {
   containerAttributeValues,
   defaultQueries,
   defaultState,
 } from '../helpers';
-import { StaticText } from '../tree/leafs';
+import { StaticText } from './leafs';
 
 describe('flattenA11yTree', () => {
   it('should not remove the root container', () => {

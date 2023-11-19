@@ -1,6 +1,6 @@
 import { render, screen, within } from '@testing-library/react';
 import { GroupedListbox } from './GroupedListbox';
-import { byRole } from '../../../test-helpers';
+import { byRole } from '../../../helpers/by-role';
 import userEvent from '@testing-library/user-event';
 
 Element.prototype.scrollIntoView = jest.fn();

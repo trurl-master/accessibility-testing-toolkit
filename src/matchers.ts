@@ -3,7 +3,7 @@ import { getAccessibilityTree } from './tree/accessibility-tree';
 import { pruneContainerNodes } from './tree/prune-container-nodes';
 
 import { matchToNode } from './prepare-diff';
-import { getPrettyTree } from './pretty-tree';
+import { getPrettyTree } from './pretty-tree/pretty-tree';
 import { MatcherOptions } from './types/matchers';
 import { nodeTester } from './testers/node';
 

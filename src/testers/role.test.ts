@@ -1,4 +1,4 @@
-import { roleTester } from '../../testers/role';
+import { roleTester } from './role';
 
 describe('roleTester', () => {
   it('returns true if expected is undefined', () => {

@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import { Accordion } from './Accordion';
-import { byRole } from '../../test-helpers';
+import { byRole } from '../../helpers/by-role';
 
 describe('Accordion', () => {
   it('renders proper tree by default', () => {
@@ -41,7 +41,7 @@ describe('Accordion', () => {
         ]),
         byRole('heading', 'Billing Address'),
         byRole('heading', 'Shipping Address'),
-      ]),
+      ])
     );
   });
 });

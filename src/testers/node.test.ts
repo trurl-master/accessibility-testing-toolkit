@@ -1,6 +1,6 @@
-import { A11yTreeNode } from '../..';
-import { defaultQueries, defaultState } from '../../helpers';
-import { nodeTester } from '../../testers/node';
+import { A11yTreeNode } from '..';
+import { getDefaultState, getDefaultQueries } from '../helpers';
+import { nodeTester } from './node';
 
 describe('nodeTester', () => {
   const received: A11yTreeNode = {
@@ -8,8 +8,8 @@ describe('nodeTester', () => {
     role: 'generic',
     name: 'name',
     description: 'description',
-    state: { ...defaultState },
-    queries: { ...defaultQueries },
+    state: getDefaultState(),
+    queries: getDefaultQueries(),
     children: [],
   };
 
@@ -75,7 +75,7 @@ describe('nodeTester', () => {
     it('should return true if expected state is the same as received state', () => {
       expect(
         nodeTester(received, {
-          state: { ...defaultState },
+          state: getDefaultState(),
         })
       ).toBe(true);
     });
@@ -84,7 +84,7 @@ describe('nodeTester', () => {
       expect(
         nodeTester(received, {
           state: {
-            ...defaultState,
+            ...getDefaultState(),
             checked: true,
           },
         })
@@ -96,7 +96,7 @@ describe('nodeTester', () => {
     it('should return true if expected queries is the same as received queries', () => {
       expect(
         nodeTester(received, {
-          queries: { ...defaultQueries },
+          queries: getDefaultQueries(),
         })
       ).toBe(true);
     });
@@ -105,7 +105,7 @@ describe('nodeTester', () => {
       expect(
         nodeTester(received, {
           queries: {
-            ...defaultQueries,
+            ...getDefaultQueries(),
             level: 2,
           },
         })
@@ -130,8 +130,8 @@ describe('nodeTester', () => {
               role: 'generic',
               name: 'name',
               description: 'description',
-              state: { ...defaultState },
-              queries: { ...defaultQueries },
+              state: getDefaultState(),
+              queries: getDefaultQueries(),
               children: [],
             },
           ],

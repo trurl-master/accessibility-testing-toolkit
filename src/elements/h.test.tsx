@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { byRole } from '../test-helpers';
+import { byRole } from '../helpers/by-role';
 
 describe('h element', () => {
   test('implicit roles', () => {

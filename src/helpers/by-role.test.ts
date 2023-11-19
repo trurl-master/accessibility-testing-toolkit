@@ -1,4 +1,4 @@
-import { byRole } from '../test-helpers';
+import { byRole } from './by-role';
 
 describe('byRole', () => {
   it('returns an object with only role', () => {

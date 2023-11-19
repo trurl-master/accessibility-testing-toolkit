@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { byRole } from '../../test-helpers';
+import { byRole } from '../../helpers/by-role';
 
 describe('InputWithLabelAndDescription', () => {
   it('renders', () => {
@@ -18,7 +18,7 @@ describe('InputWithLabelAndDescription', () => {
           For example, gate code or other information to help the driver find
           you
         </div>
-      </div>,
+      </div>
     );
 
     expect(container).toHaveA11yTree(
@@ -26,7 +26,7 @@ describe('InputWithLabelAndDescription', () => {
         byRole('LabelText', ['Special instructions:']),
         byRole('textbox', 'Special instructions:'),
         'For example, gate code or other information to help the driver find you',
-      ]),
+      ])
     );
   });
 });

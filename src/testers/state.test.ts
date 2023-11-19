@@ -1,4 +1,4 @@
-import { stateTester } from '../../testers/state';
+import { stateTester } from './state';
 
 const definedReceived = {
   busy: true,

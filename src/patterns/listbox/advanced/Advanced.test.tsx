@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { byRole } from '../../../test-helpers';
+import { byRole } from '../../../helpers/by-role';
 import userEvent from '@testing-library/user-event';
 
 const AdvancedSelect = () => {
@@ -47,7 +47,7 @@ describe('AdvancedSelect pattern', () => {
             ]),
           ],
         },
-      ]),
+      ])
     );
   });
 
@@ -74,7 +74,7 @@ describe('AdvancedSelect pattern', () => {
           byRole('option', { name: 'Macaw' }),
           byRole('option', { name: 'Albatross' }),
         ]),
-      ]),
+      ])
     );
 
     await user.selectOptions(listbox, 'macaw');
@@ -91,7 +91,7 @@ describe('AdvancedSelect pattern', () => {
           byRole('option', { name: 'Macaw', selected: true }),
           byRole('option', { name: 'Albatross' }),
         ]),
-      ]),
+      ])
     );
   });
 });

@@ -1,9 +1,9 @@
-import { isTextMatcher } from './type-guards';
+import { isTextMatcher } from '../type-guards';
 import {
   A11yTreeNodeMatch,
   A11yTreeNodeQueriesMatch,
   A11yTreeNodeStateMatch,
-} from './types/types';
+} from '../types/types';
 
 type NameDescriptionStateQueries = Omit<
   A11yTreeNodeMatch,

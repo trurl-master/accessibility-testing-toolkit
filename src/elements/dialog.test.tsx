@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { byRole } from '../test-helpers';
+import { byRole } from '../helpers/by-role';
 
 describe('dialog', () => {
   it('renders correct structure', () => {

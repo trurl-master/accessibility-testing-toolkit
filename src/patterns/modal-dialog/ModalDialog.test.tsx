@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { ModalDialog } from './ModalDialog';
-import { byRole } from '../../test-helpers';
+import { byRole } from '../../helpers/by-role';
 
 describe('ModalDialog pattern', () => {
   it('renders dialog1', () => {
@@ -21,7 +21,7 @@ describe('ModalDialog pattern', () => {
         byRole('button', 'Verify Address'),
         byRole('button', 'Add'),
         byRole('button', 'Cancel'),
-      ]),
+      ])
     );
   });
 
@@ -50,8 +50,8 @@ describe('ModalDialog pattern', () => {
           byRole('link', 'link to help'),
           byRole('button', 'accepting an alternative form'),
           byRole('button', 'Close'),
-        ],
-      ),
+        ]
+      )
     );
   });
 
@@ -71,7 +71,7 @@ describe('ModalDialog pattern', () => {
           byRole('link', 'your profile.'),
         ]),
         byRole('button', 'OK'),
-      ]),
+      ])
     );
   });
 
@@ -93,8 +93,8 @@ describe('ModalDialog pattern', () => {
           byRole('heading', 'End of the Road!'),
           byRole('paragraph', [/^You activated/]),
           byRole('button', 'Close'),
-        ],
-      ),
+        ]
+      )
     );
   });
 });
