@@ -4,15 +4,19 @@ import { StaticText } from '../tree/leafs';
 export type AsNonLandmarkRoles = 'HeaderAsNonLandmark' | 'FooterAsNonLandmark';
 export type VirtualRoles =
   | 'Abbr'
+  | 'Audio'
+  | 'Canvas'
   | 'Details'
   | 'DescriptionListDetails'
   | 'DescriptionList'
   | 'DescriptionListTerm'
+  | 'DisclosureTriangle'
   | 'EmbeddedObject'
+  | 'Figcaption'
   | 'PluginObject'
   | 'LabelText'
   | 'LineBreak'
-  | 'DisclosureTriangle';
+  | 'Video';
 
 export type ARIARoleDefinitionKeyExtended =
   | ARIARoleDefinitionKey

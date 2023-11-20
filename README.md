@@ -124,15 +124,21 @@ The toolkit follows standardized role definitions, with some customizations to p
 Specifically, the toolkit applies the following custom roles:
 
 - `abbr`: Mapped to `Abbr`
+- `audio`: Mapped to `Audio`
+- `canvas`: Mapped to `Canvas`
 - `details`: Mapped to `Details`
 - `dd`: Mapped to `DescriptionListDetails`
 - `dl`: Mapped to `DescriptionList`
 - `dt`: Mapped to `DescriptionListTerm`
 - `embed`: Mapped to `EmbeddedObject`
+- `figcaption`: Mapped to `Figcaption`
 - `object`: Mapped to `PluginObject`
 - `label`: Mapped to `LabelText`
 - `br`: Mapped to `LineBreak`
 - `summary`: Mapped to `DisclosureTriangle`
+- `video`: Mapped to `Video`
+
+This list is _work in progress_ and will be expanded in the future.
 
 ### `byRole` Helper
 

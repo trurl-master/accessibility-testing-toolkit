@@ -83,9 +83,14 @@ export const isDefaultQueries = (
 export const isDefaultAttributeValues = (
   node: A11yTreeNode | A11yTreeForDiff
 ): boolean => {
-  return Object.entries(containerAttributeValues).every(
-    ([key, value]) =>
-      value === node[key as keyof typeof containerAttributeValues]
+  // return Object.entries(containerAttributeValues).every(
+  //   ([key, value]) =>
+  //     value === node[key as keyof typeof containerAttributeValues]
+  // );
+  return (
+    (node.role === containerAttributeValues.role || node.role === undefined) &&
+    node.name === containerAttributeValues.name &&
+    node.description === containerAttributeValues.description
   );
 };
 

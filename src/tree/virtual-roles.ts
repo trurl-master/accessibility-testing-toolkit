@@ -41,6 +41,18 @@ export const virtualRoles: RoleMatcher[] = [
     roles: ['Abbr'],
     specificity: 1,
   },
+  // audio: 'Audio',
+  {
+    match: (node: HTMLElement) => node.tagName.toLowerCase() === 'audio',
+    roles: ['Audio'],
+    specificity: 1,
+  },
+  // canvas: 'Canvas',
+  {
+    match: (node: HTMLElement) => node.tagName.toLowerCase() === 'canvas',
+    roles: ['Canvas'],
+    specificity: 1,
+  },
   // details: 'Details',
   {
     match: (node: HTMLElement) => node.tagName.toLowerCase() === 'details',
@@ -71,6 +83,12 @@ export const virtualRoles: RoleMatcher[] = [
     roles: ['EmbeddedObject'],
     specificity: 1,
   },
+  // figcaption: 'Figcaption',
+  {
+    match: (node: HTMLElement) => node.tagName.toLowerCase() === 'figcaption',
+    roles: ['Figcaption'],
+    specificity: 1,
+  },
   // object: 'PluginObject',
   {
     match: (node: HTMLElement) => node.tagName.toLowerCase() === 'object',
@@ -93,6 +111,12 @@ export const virtualRoles: RoleMatcher[] = [
   {
     match: (node: HTMLElement) => node.tagName.toLowerCase() === 'summary',
     roles: ['DisclosureTriangle'],
+    specificity: 1,
+  },
+  // video: 'Video',
+  {
+    match: (node: HTMLElement) => node.tagName.toLowerCase() === 'video',
+    roles: ['Video'],
     specificity: 1,
   },
 ];

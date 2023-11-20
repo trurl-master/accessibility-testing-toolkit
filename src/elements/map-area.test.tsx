@@ -52,13 +52,11 @@ describe('map-area', () => {
 
     expect(container).toHaveA11yTree(
       byRole('generic', [
-        byRole(undefined, [
-          byRole('link', 'HTTP'),
-          byRole('link', 'HTML'),
-          byRole('link', 'JavaScript'),
-          byRole('link', 'Web APIs'),
-          byRole('link', 'CSS'),
-        ]),
+        byRole('link', 'HTTP'),
+        byRole('link', 'HTML'),
+        byRole('link', 'JavaScript'),
+        byRole('link', 'Web APIs'),
+        byRole('link', 'CSS'),
         byRole('img', 'MDN infographic'),
       ])
     );

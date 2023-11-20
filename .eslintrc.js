@@ -18,6 +18,14 @@ module.exports = {
       { ignoreRestSiblings: true },
     ],
     '@typescript-eslint/ban-ts-comment': 'warn',
+    'no-irregular-whitespace': [
+      'error',
+      {
+        skipStrings: true,
+        skipTemplates: true,
+        skipJSXText: true,
+      },
+    ],
   },
   env: {
     browser: true,
