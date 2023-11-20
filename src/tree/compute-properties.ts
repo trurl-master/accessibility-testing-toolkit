@@ -152,7 +152,10 @@ function computeAriaValueText(element: HTMLElement) {
   return valueText === null ? undefined : valueText;
 }
 
-function computeRoles(element: HTMLElement, context: A11yTreeNodeContext) {
+function computeRoles(
+  element: HTMLElement,
+  context: Pick<A11yTreeNodeContext, 'isListSubtree' | 'isNonLandmarkSubtree'>
+) {
   let roles = [];
   // TODO: This violates html-aria which does not allow any role on every element
   if (element.hasAttribute('role')) {

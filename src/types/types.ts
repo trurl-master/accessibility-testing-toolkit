@@ -1,5 +1,6 @@
-import { ARIARoleDefinitionKey } from 'aria-query';
-import { StaticText } from '../tree/leafs';
+import type { ARIARoleDefinitionKey } from 'aria-query';
+import type { StaticText } from '../tree/leafs';
+import type { IsInaccessibleOptions } from 'dom-accessibility-api';
 
 export type AsNonLandmarkRoles = 'HeaderAsNonLandmark' | 'FooterAsNonLandmark';
 export type VirtualRoles =
@@ -39,6 +40,7 @@ export type TextMatcher = string | number | RegExp | TextMatcherFunction;
 export type A11yTreeNodeContext = {
   isListSubtree?: boolean;
   isNonLandmarkSubtree?: boolean;
+  isInaccessibleOptions?: IsInaccessibleOptions;
 };
 
 export type A11yTreeNodeState = {

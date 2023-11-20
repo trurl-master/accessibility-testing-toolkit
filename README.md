@@ -117,6 +117,44 @@ test('accessible dialog has the correct accessibility tree', () => {
 
 Container nodes in the DOM, such as non-semantic `<div>` and `<span>` elements, can clutter the accessibility tree and obscure meaningful hierarchy in tests. The Accessibility Testing Toolkit automatically prunes these nodes (_except for the root node_), simplifying test assertions by focusing on semantically significant elements. This approach reduces test fragility against markup changes and enhances clarity, allowing developers to concentrate on the core accessibility features of their components. By ignoring container nodes, the toolkit promotes a development workflow that prioritizes user experience over structural implementation details.
 
+#### Handling Visibility
+
+When determining whether elements in the DOM are accessible, certain attributes and CSS properties signal that an element, along with its children, should not be considered visible:
+
+- Elements with the `hidden` attribute or `aria-hidden="true"`.
+- Styles that set `display: none` or `visibility: hidden`.
+
+In testing environments, relying on attribute checks may be necessary since `getComputedStyle` may not reflect styles defined in external stylesheets.
+
+##### Enhancing Visibility Detection
+
+Extend default visibility checks with custom logic to handle additional cases. In this example we consider elements with the `hidden` or `invisible` (used for example by `TailwindCSS`) classes as inaccessible:
+
+```ts
+import { isSubtreeInaccessible as originalIsSubtreeInaccessible } from 'accessibility-testing-toolkit';
+
+function isSubtreeInaccessible(element: HTMLElement): boolean {
+  // Include original checks and additional conditions for TailwindCSS classes
+  return (
+    originalIsSubtreeInaccessible(element) ||
+    element.classList.contains('hidden') ||
+    element.classList.contains('invisible')
+  );
+}
+
+// Set globally in jest-setup.js
+configToolkit({
+  isInaccessibleOptions: { isSubtreeInaccessible },
+});
+
+// Or per matcher
+expect(element).toHaveA11yTree(expectedTree, {
+  isInaccessibleOptions: { isSubtreeInaccessible },
+});
+```
+
+By leveraging both the library's default visibility logic and custom class checks, this approach effectively accommodates the use of utility-first CSS frameworks within visibility determination processes.
+
 #### Calculating roles
 
 The toolkit follows standardized role definitions, with some customizations to provide more specific roles for certain elements, similar to the approach used by Google Chrome

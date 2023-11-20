@@ -1,4 +1,4 @@
-import { A11yTreeNodeMatch, A11yTreeNodeContext } from './types';
+import type { A11yTreeNodeMatch, A11yTreeNodeContext } from './types';
 
 type MatcherOptions = A11yTreeNodeContext;
 

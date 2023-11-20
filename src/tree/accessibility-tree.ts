@@ -23,6 +23,7 @@ import {
 import { isDefined } from '../type-guards';
 import { StaticText } from './leafs';
 import { MatcherOptions } from '../types/matchers';
+import { getConfig } from '../config';
 
 // if a descendant of an article, aside, main, nav or section element, or an element with role=article, complementary, main, navigation or region
 const isNonLandmarkRole = (element: HTMLElement, role: string) =>
@@ -32,9 +33,6 @@ const isNonLandmarkRole = (element: HTMLElement, role: string) =>
   ['aricle', 'complementary', 'main', 'navigation', 'region'].includes(role);
 
 const isList = (role: HTMLElement['role']) => role === 'list';
-// ['list', 'listbox', 'menu', 'menubar', 'radiogroup', 'tablist'].includes(
-//   role ?? ''
-// );
 
 const defaultOptions = {
   isListSubtree: false,
@@ -47,13 +45,14 @@ export const getAccessibilityTree = (
     isListSubtree: userListSubtree = defaultOptions.isListSubtree,
     isNonLandmarkSubtree:
       userNonLandmarkSubtree = defaultOptions.isNonLandmarkSubtree,
+    isInaccessibleOptions = getConfig().isInaccessibleOptions,
   }: MatcherOptions = defaultOptions
 ): A11yTreeNode | null => {
   function assembleTree(
     element: HTMLElement,
     context: A11yTreeNodeContext
   ): A11yTreeNode | null {
-    if (isInaccessible(element)) {
+    if (isInaccessible(element, context.isInaccessibleOptions)) {
       return null;
     }
 
@@ -92,6 +91,7 @@ export const getAccessibilityTree = (
               isNonLandmarkSubtree:
                 context.isNonLandmarkSubtree ||
                 isNonLandmarkRole(element, role),
+              isInaccessibleOptions,
             });
           }
 
@@ -112,5 +112,6 @@ export const getAccessibilityTree = (
   return assembleTree(element, {
     isListSubtree: userListSubtree,
     isNonLandmarkSubtree: userNonLandmarkSubtree,
+    isInaccessibleOptions,
   });
 };
