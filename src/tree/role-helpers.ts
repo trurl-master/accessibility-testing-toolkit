@@ -15,7 +15,10 @@ const elementRoleList = buildElementRoleList(elementRoles);
 
 function getImplicitAriaRoles(
   currentNode: HTMLElement,
-  { isListSubtree, isNonLandmarkSubtree }: A11yTreeNodeContext
+  {
+    isListSubtree,
+    isNonLandmarkSubtree,
+  }: Pick<A11yTreeNodeContext, 'isListSubtree' | 'isNonLandmarkSubtree'>
 ) {
   let result: ARIARoleDefinitionKeyExtended[] = [];
 

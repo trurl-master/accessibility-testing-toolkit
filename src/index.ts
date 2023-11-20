@@ -11,3 +11,5 @@ export {
 } from './types/types';
 export { getAccessibilityTree } from './tree/accessibility-tree';
 export { pruneContainerNodes } from './tree/prune-container-nodes';
+export { isSubtreeInaccessible } from 'dom-accessibility-api';
+export { configToolkit, getConfig } from './config';
