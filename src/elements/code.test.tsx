@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import { byRole } from '..';
 
-describe('', () => {
+describe('code', () => {
   it('renders correct structure', () => {
     const { container } = render(
       <p>

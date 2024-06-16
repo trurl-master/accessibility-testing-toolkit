@@ -1,28 +1,8 @@
-// import { defaultState } from '../helpers';
 import { defaultQueries, defaultState } from '../helpers';
 import { StaticText } from '../tree/leafs';
-import {
-  A11yTreeForDiff,
-  // A11yTreeNodeState,
-  // A11yTreeNodeStateForDiff,
-  TextMatcher,
-} from '../types/types';
+import { A11yTreeForDiff, TextMatcher } from '../types/types';
 import { omitDefaultValues } from './omit-default-values';
 import { renderProperties } from './render-properties';
-
-// const getStateDetails = (
-//   state: A11yTreeNodeState | A11yTreeNodeStateForDiff
-// ): string => {
-//   const nonDefaultEntries = Object.entries(state).filter(
-//     ([key, value]) => value !== defaultState[key as keyof A11yTreeNodeState]
-//   );
-
-//   return nonDefaultEntries.length > 0
-//     ? `${nonDefaultEntries
-//         .map(([key, value]) => `${key}: ${value}`)
-//         .join(', ')}`
-//     : '';
-// };
 
 const renderStringMatcher = (textMatcher: TextMatcher): string => {
   if (textMatcher instanceof RegExp || typeof textMatcher === 'number') {

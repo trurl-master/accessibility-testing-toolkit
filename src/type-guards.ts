@@ -9,7 +9,10 @@ const isInputElement = (element: HTMLElement): element is HTMLInputElement =>
 
 const isDetailsElement = (
   element: HTMLElement
-): element is HTMLDetailsElement => element.tagName === 'DETAILS';
+): element is HTMLDetailsElement => element.tagName.toLowerCase() === 'details';
+
+const isSummaryElement = (element: HTMLElement): element is HTMLElement =>
+  element.tagName.toLowerCase() === 'summary';
 
 const isDefined = <T>(value: T | undefined | null): value is T =>
   value !== undefined && value !== null;
@@ -44,6 +47,7 @@ export {
   isOptionElement,
   isInputElement,
   isDetailsElement,
+  isSummaryElement,
   isDefined,
   isStaticTextMatcher,
   isA11yTreeNode,

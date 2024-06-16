@@ -24,18 +24,12 @@ import { isDefined } from '../type-guards';
 import { StaticText } from './leafs';
 import { MatcherOptions } from '../types/matchers';
 import { getConfig } from '../config';
-
-// if a descendant of an article, aside, main, nav or section element, or an element with role=article, complementary, main, navigation or region
-const isNonLandmarkRole = (element: HTMLElement, role: string) =>
-  ['article', 'aside', 'main', 'nav', 'section'].includes(
-    element.tagName.toLowerCase()
-  ) ||
-  ['aricle', 'complementary', 'main', 'navigation', 'region'].includes(role);
-
-const isList = (role: HTMLElement['role']) => role === 'list';
+import { isClosedDetails, isList, isNonLandmarkRole } from './context';
+import { isInaccessibleOverride } from './overrides';
 
 const defaultOptions = {
   isListSubtree: false,
+  isClosedDetailsSubtree: false,
   isNonLandmarkSubtree: false,
 } satisfies MatcherOptions;
 
@@ -43,6 +37,8 @@ export const getAccessibilityTree = (
   element: HTMLElement,
   {
     isListSubtree: userListSubtree = defaultOptions.isListSubtree,
+    isClosedDetailsSubtree:
+      userIsClosedDetailsSubtree = defaultOptions.isClosedDetailsSubtree,
     isNonLandmarkSubtree:
       userNonLandmarkSubtree = defaultOptions.isNonLandmarkSubtree,
     isInaccessibleOptions = getConfig().isInaccessibleOptions,
@@ -52,7 +48,10 @@ export const getAccessibilityTree = (
     element: HTMLElement,
     context: A11yTreeNodeContext
   ): A11yTreeNode | null {
-    if (isInaccessible(element, context.isInaccessibleOptions)) {
+    if (
+      isInaccessible(element, context.isInaccessibleOptions) ||
+      isInaccessibleOverride(element)
+    ) {
       return null;
     }
 
@@ -88,6 +87,8 @@ export const getAccessibilityTree = (
           if (child instanceof HTMLElement) {
             return assembleTree(child, {
               isListSubtree: context.isListSubtree || isList(role),
+              isClosedDetailsSubtree:
+                context.isClosedDetailsSubtree || isClosedDetails(element),
               isNonLandmarkSubtree:
                 context.isNonLandmarkSubtree ||
                 isNonLandmarkRole(element, role),
@@ -96,7 +97,7 @@ export const getAccessibilityTree = (
           }
 
           if (child instanceof Text) {
-            if (child.textContent === null) {
+            if (child.textContent === null || isInaccessibleOverride(child)) {
               return undefined;
             }
 
@@ -111,6 +112,7 @@ export const getAccessibilityTree = (
 
   return assembleTree(element, {
     isListSubtree: userListSubtree,
+    isClosedDetailsSubtree: userIsClosedDetailsSubtree,
     isNonLandmarkSubtree: userNonLandmarkSubtree,
     isInaccessibleOptions,
   });

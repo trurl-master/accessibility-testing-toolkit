@@ -18,11 +18,11 @@ yarn add --dev accessibility-testing-toolkit
 
 ## Usage
 
-Import `accessibility-testing-toolkit` in your project once. The best place is to do it in your test setup file:
+Import `accessibility-testing-toolkit/matchers` in your project once. The best place is to do it in your test setup file:
 
 ```js
 // In your own jest-setup.js
-import 'accessibility-testing-toolkit';
+import 'accessibility-testing-toolkit/matchers';
 
 // In jest.config.js add
 setupFilesAfterEnv: ['<rootDir>/jest-setup.js'];
@@ -121,8 +121,8 @@ Container nodes in the DOM, such as non-semantic `<div>` and `<span>` elements, 
 
 When determining whether elements in the DOM are accessible, certain attributes and CSS properties signal that an element, along with its children, should not be considered visible:
 
-- Elements with the `hidden` attribute or `aria-hidden="true"`.
-- Styles that set `display: none` or `visibility: hidden`.
+- Elements with the `hidden` attribute or `aria-hidden="true"`
+- Styles that set `display: none` or `visibility: hidden`
 
 In testing environments, relying on attribute checks may be necessary since `getComputedStyle` may not reflect styles defined in external stylesheets.
 
@@ -164,7 +164,6 @@ Specifically, the toolkit applies the following custom roles:
 - `abbr`: Mapped to `Abbr`
 - `audio`: Mapped to `Audio`
 - `canvas`: Mapped to `Canvas`
-- `details`: Mapped to `Details`
 - `dd`: Mapped to `DescriptionListDetails`
 - `dl`: Mapped to `DescriptionList`
 - `dt`: Mapped to `DescriptionListTerm`
