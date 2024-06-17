@@ -7,6 +7,8 @@ import { getPrettyTree } from './pretty-tree/pretty-tree';
 import { MatcherOptions } from './types/matchers';
 import { nodeTester } from './testers/node';
 
+export { MatcherOptions } from './types/matchers.d';
+
 expect.extend({
   toHaveA11yTree(
     received: HTMLElement | A11yTreeNode,

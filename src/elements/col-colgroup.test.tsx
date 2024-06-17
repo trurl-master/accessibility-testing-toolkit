@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import { byRole } from '..';
 
-describe('', () => {
+describe('col-colgroup', () => {
   it('renders correct structure', () => {
     const { container } = render(
       <table>

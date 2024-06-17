@@ -39,6 +39,7 @@ export type TextMatcher = string | number | RegExp | TextMatcherFunction;
 
 export type A11yTreeNodeContext = {
   isListSubtree?: boolean;
+  isClosedDetailsSubtree?: boolean;
   isNonLandmarkSubtree?: boolean;
   isInaccessibleOptions?: IsInaccessibleOptions;
 };

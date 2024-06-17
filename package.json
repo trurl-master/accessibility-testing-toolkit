@@ -1,6 +1,6 @@
 {
   "name": "accessibility-testing-toolkit",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "author": "Ivan Galiatin",
   "license": "MIT",
   "description": "A toolkit for testing accessibility",
@@ -9,18 +9,32 @@
     "url": "git+https://github.com/trurl-master/accessibility-testing-toolkit.git"
   },
   "keywords": [
-    "testing",
-    "jsdom",
-    "jest",
     "accessibility",
     "accessibility tree",
-    "aria"
+    "aria",
+    "dom",
+    "jest",
+    "jsdom",
+    "testing"
   ],
   "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./matchers": {
+      "import": "./dist/matchers.mjs",
+      "require": "./dist/matchers.js",
+      "types": "./dist/matchers.d.ts"
+    }
+  },
   "files": [
     "/dist",
     "/src",
+    "matchers.js",
     "!/src/**/__tests__/*",
     "!/src/**/*.test.tsx"
   ],
@@ -49,7 +63,8 @@
   "module": "dist/esm/index.js",
   "tsup": {
     "entry": [
-      "src/index.ts"
+      "src/index.ts",
+      "src/matchers.ts"
     ],
     "splitting": false,
     "sourcemap": true,
@@ -58,8 +73,7 @@
       "cjs",
       "esm"
     ],
-    "clean": true,
-    "legacyOutput": true
+    "clean": true
   },
   "dependencies": {
     "aria-query": "^5.3.0",
